@@ -1,45 +1,82 @@
-import React from 'react';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
-import * as Yup from 'yup';
+import React, { useState } from "react";
 
-const Login = () => {
-  const initialValues = {
-    email: '',
-    password: '',
-  };
+function Login({ setUser }) {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  const validationSchema = Yup.object({
-    email: Yup.string().email('Invalid email format').required('Required'),
-    password: Yup.string().required('Required'),
-  });
-
-  const onSubmit = values => {
-    console.log('Form data', values);
-    // Add fetch request here for logging in
-  };
+  function handleSubmit(e) {
+    e.preventDefault();
+    fetch("/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password }),
+    }).then((r) => {
+      if (r.ok) {
+        r.json().then((user) => setUser(user));
+      }
+    });
+  }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-      <h1 className="text-3xl font-bold mb-4">Login</h1>
-      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-        <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit}>
-          <Form>
-            <div className="mb-4">
-              <label htmlFor="email" className="block text-gray-700">Email</label>
-              <Field type="email" id="email" name="email" className="w-full p-2 border border-gray-300 rounded mt-1" />
-              <ErrorMessage name="email" component="div" className="text-red-500 text-sm mt-1" />
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full bg-white shadow-md rounded p-8">
+        <h2 className="text-2xl font-semibold mb-4 text-center">Sign in to your account</h2>
+        <form className="space-y-4" onSubmit={handleSubmit}>
+          <div>
+            <label htmlFor="email" className="block text-gray-700 text-sm font-bold mb-1">Email address</label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              autoComplete="email"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+              placeholder="Email address"
+            />
+          </div>
+          <div>
+            <label htmlFor="password" className="block text-gray-700 text-sm font-bold mb-1">Password</label>
+            <input
+              id="password"
+              name="password"
+              type="password"
+              autoComplete="current-password"
+              required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+              placeholder="Password"
+            />
+          </div>
+
+          <div className="flex items-center justify-between">
+            <div className="flex items-center">
+              <input
+                id="remember-me"
+                name="remember-me"
+                type="checkbox"
+                className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+              />
+              <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">Remember me</label>
             </div>
-            <div className="mb-4">
-              <label htmlFor="password" className="block text-gray-700">Password</label>
-              <Field type="password" id="password" name="password" className="w-full p-2 border border-gray-300 rounded mt-1" />
-              <ErrorMessage name="password" component="div" className="text-red-500 text-sm mt-1" />
-            </div>
-            <button type="submit" className="w-full bg-blue-500 text-white p-2 rounded mt-4">Login</button>
-          </Form>
-        </Formik>
+          </div>
+
+          <div>
+            <button
+              type="submit"
+              className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            >
+              Sign in
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   );
-};
+}
 
 export default Login;
