@@ -1,52 +1,99 @@
-import React from 'react';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
-import * as Yup from 'yup';
+import React, { useState } from "react";
 
-const SignUp = () => {
-  const initialValues = {
-    name: '',
-    email: '',
-    password: '',
-  };
+function SignUp({ setUser }) {
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [passwordConfirmation, setPasswordConfirmation] = useState("");
 
-  const validationSchema = Yup.object({
-    name: Yup.string().required('Required'),
-    email: Yup.string().email('Invalid email format').required('Required'),
-    password: Yup.string().min(6, 'Password must be at least 6 characters').required('Required'),
-  });
-
-  const onSubmit = values => {
-    console.log('Form data', values);
-    // Add fetch request here for signing up
-  };
+  function handleSubmit(e) {
+    e.preventDefault();
+    fetch("/signup", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username,
+        email,
+        password,
+        password_confirmation: passwordConfirmation,
+      }),
+    }).then((r) => {
+      if (r.ok) {
+        r.json().then((user) => setUser(user));
+      }
+    });
+  }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-      <h1 className="text-3xl font-bold mb-4">Sign Up</h1>
-      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-        <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit}>
-          <Form>
-            <div className="mb-4">
-              <label htmlFor="name" className="block text-gray-700">Name</label>
-              <Field type="text" id="name" name="name" className="w-full p-2 border border-gray-300 rounded mt-1" />
-              <ErrorMessage name="name" component="div" className="text-red-500 text-sm mt-1" />
-            </div>
-            <div className="mb-4">
-              <label htmlFor="email" className="block text-gray-700">Email</label>
-              <Field type="email" id="email" name="email" className="w-full p-2 border border-gray-300 rounded mt-1" />
-              <ErrorMessage name="email" component="div" className="text-red-500 text-sm mt-1" />
-            </div>
-            <div className="mb-4">
-              <label htmlFor="password" className="block text-gray-700">Password</label>
-              <Field type="password" id="password" name="password" className="w-full p-2 border border-gray-300 rounded mt-1" />
-              <ErrorMessage name="password" component="div" className="text-red-500 text-sm mt-1" />
-            </div>
-            <button type="submit" className="w-full bg-blue-500 text-white p-2 rounded mt-4">Sign Up</button>
-          </Form>
-        </Formik>
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full bg-white shadow-md rounded p-8">
+        <h2 className="text-2xl font-semibold mb-4 text-center">Sign Up</h2>
+        <form className="space-y-4" onSubmit={handleSubmit}>
+          <div>
+            <label htmlFor="username" className="block text-gray-700 text-sm font-bold mb-1">Username</label>
+            <input
+              id="username"
+              name="username"
+              type="text"
+              autoComplete="username"
+              required
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+              placeholder="Username"
+            />
+          </div>
+          <div>
+            <label htmlFor="email" className="block text-gray-700 text-sm font-bold mb-1">Email</label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              autoComplete="email"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+              placeholder="Email address"
+            />
+          </div>
+          <div>
+            <label htmlFor="password" className="block text-gray-700 text-sm font-bold mb-1">Password</label>
+            <input
+              id="password"
+              name="password"
+              type="password"
+              autoComplete="new-password"
+              required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+              placeholder="Password"
+            />
+          </div>
+          <div>
+            <label htmlFor="passwordConfirmation" className="block text-gray-700 text-sm font-bold mb-1">Confirm password</label>
+            <input
+              id="passwordConfirmation"
+              name="passwordConfirmation"
+              type="password"
+              autoComplete="new-password"
+              required
+              value={passwordConfirmation}
+              onChange={(e) => setPasswordConfirmation(e.target.value)}
+              className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+              placeholder="Confirm Password"
+            />
+          </div>
+          <div>
+            <button type="submit" className="bg-blue-300 text-white py-2 px-4 rounded hover:bg-blue-500 w-full">Sign Up</button>
+          </div>
+        </form>
       </div>
     </div>
   );
-};
+}
 
 export default SignUp;
