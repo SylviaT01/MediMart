@@ -1,30 +1,57 @@
-import React, { useState } from "react";
+// import React, { useState } from "react";
 
-function SignUp({ setUser }) {
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [passwordConfirmation, setPasswordConfirmation] = useState("");
+// function SignUp({ setUser }) {
+//   const [name, setName] = useState("");
+//   const [email, setEmail] = useState("");
+//   const [password, setPassword] = useState("");
+//   const [passwordConfirmation, setPasswordConfirmation] = useState("");
 
-  function handleSubmit(e) {
-    e.preventDefault();
-    fetch("/signup", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        username,
-        email,
-        password,
-        password_confirmation: passwordConfirmation,
-      }),
-    }).then((r) => {
-      if (r.ok) {
-        r.json().then((user) => setUser(user));
-      }
-    });
+//   function handleSubmit(e) {
+//     e.preventDefault();
+//     fetch("http://127.0.0.1:5000/users", {
+//       method: "POST",
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//       body: JSON.stringify({
+//         name,
+//         email,
+//         password,
+//         password_confirmation: passwordConfirmation,
+//       }),
+//     }).then((r) => {
+//       if (r.ok) {
+//         r.json().then((user) => setUser(user));
+//       }
+//     });
+//   }
+
+import React, { useContext, useState } from 'react'
+// import { Link } from 'react-router-dom'
+import { UserContext } from './context/userContext'
+
+
+function SignUp() 
+{
+
+  const {signup} = useContext(UserContext)
+
+
+
+  const [email, setEmail] = useState()
+  const [password, setPassword] = useState()
+  const [passwordConfirmation, setPasswordConfirmation] = useState()
+  const [name, setName] = useState()
+
+  console.log(email, password, passwordConfirmation, name);
+  
+  function handleSubmit(e){
+    e.preventDefault()
+
+    signup(name, email, password)
   }
+
+
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
@@ -39,8 +66,8 @@ function SignUp({ setUser }) {
               type="text"
               autoComplete="username"
               required
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              value={name}
+              onChange={(e) => setName(e.target.value)}
               className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
               placeholder="Username"
             />

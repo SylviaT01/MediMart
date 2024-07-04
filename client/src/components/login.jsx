@@ -1,28 +1,48 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from 'react'
+// import { Link } from 'react-router-dom'
+import { UserContext } from './context/userContext'
 
-function Login({ setUser }) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+export default function Login() 
+{
 
-  function handleSubmit(e) {
-    e.preventDefault();
-    fetch("/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email, password }),
-    }).then((r) => {
-      if (r.ok) {
-        r.json().then((user) => setUser(user));
-      }
-    });
-  }
+  const {login} = useContext(UserContext)
+    const [email, setEmail] = useState()
+    const [password, setPassword] = useState()
+
+
+    console.log(email, password);
+    
+    function handleSubmit(e){
+        e.preventDefault()
+
+        login(email, password)
+
+    }
+// function Login({ setUser }) {
+//   const [email, setEmail] = useState("");
+//   const [password, setPassword] = useState("");
+
+//   function handleSubmit(e) {
+  //   e.preventDefault();
+  //   fetch("http://127.0.0.1:5000/login", {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify({ email, password }),
+  //   }).then((r) => {
+  //     if (r.ok) {
+  //       r.json().then((user) => setUser(user));
+  //     }
+  //   });
+  // }
+
+
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full bg-white shadow-md rounded p-8">
-        <h2 className="text-2xl font-semibold mb-4 text-center">Sign in to your account</h2>
+        <h2 className="text-2xl font-semibold mb-4 text-center">Log in to your account</h2>
         <form className="space-y-4" onSubmit={handleSubmit}>
           <div>
             <label htmlFor="email" className="block text-gray-700 text-sm font-bold mb-1">Email address</label>
@@ -79,4 +99,4 @@ function Login({ setUser }) {
   );
 }
 
-export default Login;
+// export default Login;
