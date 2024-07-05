@@ -12,17 +12,28 @@ const ProductList = () => {
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-3xl font-bold mb-4">Products</h1>
-      <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-screen-xl mx-auto bg-blue-50 z-100 px-4 py-4">
         {products.map(product => (
-          <li key={product.id} className="bg-white p-4 rounded-lg shadow-md">
-            <a href={`/product/${product.id}`} className="block mb-2">
-              <img src={product.image_url} alt={product.title} className="w-full h-auto object-contain" />
-            </a>
-            <a href={`/product/${product.id}`} className="text-xl font-semibold text-blue-500">{product.title}</a>
-            <p className="text-gray-700 mt-2">${product.price}</p>
-          </li>
+          <div key={product.id} className="border p-4 flex flex-col justify-between shadow-xl rounded-lg overflow-hidden bg-white">
+            <h2 className="font-medium text-lg mb-2 overflow-hidden relative">
+              <span className="marquee">{product.title}</span>
+            </h2>
+            <div className="border border-gray-200 h-80 mb-4 overflow-hidden relative text-center">
+              <img
+                src={product.image_url}
+                alt={product.title}
+                className="p-4 mr-2 w-80 h-80 object-contain "
+                style={{ maxHeight: "300px" }}
+              />
+            </div>
+            <div className="flex flex-col gap-2">
+              <div className="text-sm text-gray-500 capitalize">{product.category}</div>
+              <div className="text-lg font-semibold">{product.price}</div>
+              <button className="bg-blue-300 hover:bg-blue-200 text-white py-1 px-2 rounded-md transition duration-300 ease-in-out">Buy Now</button>
+            </div>
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
 };
