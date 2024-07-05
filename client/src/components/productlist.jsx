@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
+import { GrSearch } from "react-icons/gr";
 
 const ProductList = () => {
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
 
   // Fetch products from API
   useEffect(() => {
@@ -23,23 +25,42 @@ const ProductList = () => {
   // Handle category filter change
   const handleCategoryChange = (category) => {
     setSelectedCategory(category);
-    if (category === '') {
-      // If category is empty, show all products
-      setFilteredProducts(products);
-    } else {
-      // Filter products based on selected category
-      const filtered = products.filter(product => product.category === category);
-      setFilteredProducts(filtered);
+    filterProducts(category, searchQuery);
+  };
+
+  // Handle search query change
+  const handleSearchChange = (query) => {
+    setSearchQuery(query);
+    filterProducts(selectedCategory, query);
+  };
+
+  // Filter products based on selected category and search query
+  const filterProducts = (category, query) => {
+    let filtered = products;
+
+    if (category) {
+      filtered = filtered.filter(product => product.category === category);
     }
+
+    if (query) {
+      filtered = filtered.filter(product => product.title.toLowerCase().includes(query.toLowerCase()));
+    }
+
+    setFilteredProducts(filtered);
+  };
+
+  // Handle search button click
+  const handleSearchClick = () => {
+    filterProducts(selectedCategory, searchQuery);
   };
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-3xl font-bold mb-4">Products</h1>
-      <div className="flex mb-4 h-full">
+      {/* <h1 className="text-3xl font-bold mb-4">Products</h1> */}
+      <div className="flex mb-4 space-x-4">
         {/* Category filter dropdown */}
         <select
-          className="px-4 py-2 border border-gray-300 rounded-md"
+          className="px-4 py-2 border border-gray-300 rounded-md capitalize"
           value={selectedCategory}
           onChange={(e) => handleCategoryChange(e.target.value)}
         >
@@ -48,15 +69,25 @@ const ProductList = () => {
             <option key={category} value={category}>{category}</option>
           ))}
         </select>
+        {/* Search bar */}
+        <input
+          type="text"
+          className="px-4 py-2 border border-gray-300 rounded-md"
+          placeholder="Search products"
+          value={searchQuery}
+          onChange={(e) => handleSearchChange(e.target.value)}
+        />
+        {/* Search button */}
+        <button className="bg-blue-300 hover:bg-blue-200/90 p-2 py-2 rounded border" onClick={handleSearchClick}><GrSearch /></button>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 max-w-screen-xl  bg-blue-50 z-100 px-4 py-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 max-w-screen-xl bg-blue-50 z-100 px-4 py-4">
         {filteredProducts.map(product => (
           <div key={product.id} className="border p-4 flex flex-col justify-between shadow-xl rounded-lg overflow-hidden bg-white">
             <h2 className="font-medium text-lg mb-2 overflow-hidden relative">
               <span className="marquee">{product.title}</span>
             </h2>
             <div className="border border-gray-200 h-60 mb-4 overflow-hidden relative text-center">
-            <div className="relative group">
+              <div className="relative group">
                 <img
                   src={product.image_url}
                   alt={product.title}

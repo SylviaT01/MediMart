@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import NavBar from './components/navbar';
 import Home from './components/home';
@@ -8,8 +8,14 @@ import Login from './components/login';
 import SignUp from './components/signup';
 import Contact from './components/Contact';
 import { UserProvider } from './components/context/userContext';
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 
 function App() {
+  useEffect(() => {
+    AOS.init({ duration: 1000 });
+  }, []);
+
   return (
     <Router>
       <UserProvider>
