@@ -14,9 +14,8 @@ class User(db.Model):
 
 class Product(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(120), nullable=False)
+    title = db.Column(db.String(120), nullable=False)
     image_url = db.Column(db.String(255))
-    description = db.Column(db.String(255))
     category = db.Column(db.String(120))
     price = db.Column(db.Integer, nullable=False)
     is_in_stock = db.Column(db.Boolean, default=True)

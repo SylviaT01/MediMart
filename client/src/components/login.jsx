@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react'
-// import { Link } from 'react-router-dom'
 import { UserContext } from './context/userContext'
+import { Link } from 'react-router-dom';
 
 export default function Login() 
 {
@@ -18,26 +18,6 @@ export default function Login()
         login(email, password)
 
     }
-// function Login({ setUser }) {
-//   const [email, setEmail] = useState("");
-//   const [password, setPassword] = useState("");
-
-//   function handleSubmit(e) {
-  //   e.preventDefault();
-  //   fetch("http://127.0.0.1:5000/login", {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.stringify({ email, password }),
-  //   }).then((r) => {
-  //     if (r.ok) {
-  //       r.json().then((user) => setUser(user));
-  //     }
-  //   });
-  // }
-
-
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
@@ -84,7 +64,11 @@ export default function Login()
               <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">Remember me</label>
             </div>
           </div>
-
+          <div>
+          <div>
+              Don't have an account? <Link to="/signup" className="text-blue-500">Register</Link>
+          </div> 
+          </div>
           <div>
             <button
               type="submit"

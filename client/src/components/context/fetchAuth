@@ -1,0 +1,36 @@
+const fetchWithAuth = async (url, options = {}) => {
+    let token = localStorage.getItem('token');
+    options.headers = {
+        ...options.headers,
+        'Authorization': `Bearer ${token}`
+    };
+
+    let response = await fetch(url, options);
+
+    if (response.status === 401) {
+        const refreshToken = localStorage.getItem('refresh_token');
+        const refreshResponse = await fetch('http://127.0.0.1:5000/refresh', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${refreshToken}`
+            }
+        });
+
+        if (refreshResponse.ok) {
+            const refreshData = await refreshResponse.json();
+            localStorage.setItem('token', refreshData.access_token);
+
+            options.headers['Authorization'] = `Bearer ${refreshData.access_token}`;
+            response = await fetch(url, options);
+        } else {
+            // Handle refresh token failure (e.g., redirect to login)
+            localStorage.removeItem('token');
+            localStorage.removeItem('refresh_token');
+            nav('/login');
+            return;
+        }
+    }
+
+    return response;
+};

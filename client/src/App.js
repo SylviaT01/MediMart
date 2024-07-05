@@ -6,6 +6,7 @@ import ProductList from './components/productlist';
 import AboutUs from './components/About'
 import Login from './components/login';
 import SignUp from './components/signup';
+import Contact from './components/Contact';
 import { UserProvider } from './components/context/userContext';
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
             <Route path="/home" element={<Home />} />
             <Route path="/products" element={<ProductList />} />
             <Route path="/about" element={<AboutUs />} />
+            <Route path="/contact" element={<Contact />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<SignUp />} />
           </Routes>
