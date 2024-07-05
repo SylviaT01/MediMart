@@ -28,6 +28,6 @@ code {
 /* Apply Marquee Animation to .marquee */
 .marquee {
   display: inline-block;
-  animation: marquee 10s linear infinite;
+  animation: marquee 30s linear infinite;
   white-space: nowrap;
 }
