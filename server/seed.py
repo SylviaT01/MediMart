@@ -1,16 +1,49 @@
-from medimart.server.app.app import db
-from models import User, Product, Order
-from medimart.server.app.app import app, bcrypt
+from app import db, create_app, bcrypt
+from app.models import User, Product, Order
 from faker import Faker
 import random
 from datetime import datetime, timedelta
+import requests
+import logging
 
 fake = Faker()
 
-# Specify the number of users, products, and orders to generate
+# Specify the number of users and orders to generate
 NUM_USERS = 20
-NUM_PRODUCTS = 50
 NUM_ORDERS = 40
+
+api_url = "https://api.github.com/repos/ahabab23/chemistdata/contents/payless"
+
+# URL of the GitHub API to list the JSON files in the folder
+logging.basicConfig(level=logging.DEBUG)  # Enable debug logging
+
+def fetch_json_files_list(url):
+    try:
+        response = requests.get(url)
+        response.raise_for_status()  # Raise an error for bad status codes
+        # Parse HTML or use GitHub API to get file URLs
+        # Example: Use GitHub API to list contents of a directory
+        api_url = "https://api.github.com/repos/ahabab23/chemistdata/contents/payless"
+        headers = {"Accept": "application/vnd.github.v3+json"}
+        response = requests.get(api_url, headers=headers)
+        response.raise_for_status()
+        files = response.json()
+        json_files = [file['download_url'] for file in files if file.get('name', '').endswith('.json')]
+        return json_files
+    except requests.exceptions.RequestException as e:
+        logging.error(f"Error fetching JSON files from {url}: {e}")
+        return []
+    except ValueError as e:
+        logging.error(f"Error decoding JSON from {url}: {e}")
+        return []
+
+
+def fetch_products_from_github(urls):
+    products = []
+    for url in urls:
+        response = requests.get(url)
+        products.extend(response.json())
+    return products
 
 def generate_fake_users(num_users):
     users = []
@@ -22,22 +55,22 @@ def generate_fake_users(num_users):
         users.append(user)
     return users
 
-def generate_fake_products(num_products):
+def generate_products_from_json(data):
     products = []
-    for _ in range(num_products):
-        name = fake.word().capitalize()
-        image_url = fake.image_url()
-        description = fake.sentence(nb_words=10)
-        category = fake.word()
-        price = random.randint(10, 1000)
-        is_in_stock = fake.boolean()
+    for item in data:
+        title = item['title']
+        image_url = item['image_url']
+        # description = item['description']
+        # category = item['category']
+        price = item['price']
+        # is_in_stock = item['is_in_stock']
         product = Product(
-            name=name,
+            title=title,
             image_url=image_url,
-            description=description,
-            category=category,
+            # description=description,
+            # category=category,
             price=price,
-            is_in_stock=is_in_stock
+            # is_in_stock=is_in_stock
         )
         products.append(product)
     return products
@@ -60,16 +93,29 @@ def generate_fake_orders(num_orders, users, products):
         orders.append(order)
     return orders
 
+def clear_tables():
+    Order.query.delete()
+    Product.query.delete()
+    User.query.delete()
+    db.session.commit()
+
+app = create_app()
+
 with app.app_context():
     db.create_all()
+
+    # Clear existing data
+    clear_tables()
 
     # Generate and add fake users
     users = generate_fake_users(NUM_USERS)
     db.session.add_all(users)
     db.session.commit()
 
-    # Generate and add fake products
-    products = generate_fake_products(NUM_PRODUCTS)
+    # Fetch and add products from JSON files in the folder
+    json_files_list = fetch_json_files_list(api_url)
+    products_data = fetch_products_from_github(json_files_list)
+    products = generate_products_from_json(products_data)
     db.session.add_all(products)
     db.session.commit()
 

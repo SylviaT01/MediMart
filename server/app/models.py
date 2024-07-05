@@ -16,9 +16,9 @@ class Product(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(120), nullable=False)
     image_url = db.Column(db.String(255))
-    category = db.Column(db.String(120))
+    # category = db.Column(db.String(120))
     price = db.Column(db.Integer, nullable=False)
-    is_in_stock = db.Column(db.Boolean, default=True)
+    # is_in_stock = db.Column(db.Boolean, default=True)
     orders = db.relationship('Order', backref='product', lazy=True)
 
 

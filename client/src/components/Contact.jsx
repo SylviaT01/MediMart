@@ -102,7 +102,7 @@ const Contact = () => {
               </div>
               <div>
                 <h3 className="font-bold text-lg text-gray-800">Email Address</h3>
-                <p className="text-blue-600 underline underline-offset-2">contact@swiftmarketplace.com</p>
+                <p className="text-blue-600 underline underline-offset-2">contact@medimart.com</p>
               </div>
               <div>
                 <h3 className="font-bold text-lg text-gray-800">Opening Hours</h3>
