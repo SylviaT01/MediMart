@@ -204,20 +204,28 @@ def delete_product(product_id):
     return '', 204
 
 # Add new order
+# Add new order
 @routes.route('/orders', methods=['POST'])
 def create_order():
-    data = request.get_json()
-    new_order = Order(
-        user_id=data['user_id'],
-        product_id=data['product_id'],
-        quantity=data['quantity'],
-        total_price=data['total_price'],
-        order_date=datetime.utcnow()
-    )
-    db.session.add(new_order)
-    db.session.commit()
-    return jsonify(new_order.as_dict()), 201
+    try:
+        data = request.get_json()
+        if not data or not all(key in data for key in ('user_id', 'product_id', 'quantity', 'total_price')):
+            return jsonify({"error": "Invalid data"}), 400
 
+        new_order = Order(
+            user_id=data['user_id'],
+            product_id=data['product_id'],
+            quantity=data['quantity'],
+            price=data.get('price'),  # Get the price from the data if available
+            total_price=data['total_price'],
+            order_date=datetime.utcnow()
+        )
+        db.session.add(new_order)
+        db.session.commit()
+        return jsonify(new_order.as_dict()), 201
+    except Exception as e:
+        print(f"Error creating order: {e}")
+        return jsonify({"error": "An error occurred while creating the order"}), 500
 #Get all orders
 @routes.route('/orders', methods=['GET'])
 def get_orders():

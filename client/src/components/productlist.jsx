@@ -61,8 +61,7 @@ const ProductList = () => {
   };
 
   return (
-    <div className="container mx-auto p-4">
-      {/* <h1 className="text-3xl font-bold mb-4">Products</h1> */}
+    <div className="w-full mx-auto p-4">
       <div className="flex mb-4 space-x-4">
         {/* Category filter dropdown */}
         <select
@@ -93,7 +92,7 @@ const ProductList = () => {
           <GrSearch />
         </button>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 max-w-screen-xl bg-blue-50 z-100 px-4 py-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 w-full">
         {filteredProducts.map((product) => (
           <div
             key={product.id}
@@ -116,7 +115,9 @@ const ProductList = () => {
               <div className="text-sm text-gray-500 capitalize">
                 {product.category_name}
               </div>
-              <div className="text-lg font-semibold">Ksh {product.price}</div>
+              <div className="text-lg font-semibold">
+                Ksh {product.price.toLocaleString()}
+              </div>
               <button className="bg-blue-300 hover:bg-blue-200 text-white py-1 px-2 rounded-md transition duration-300 ease-in-out">
                 Buy Now
               </button>
