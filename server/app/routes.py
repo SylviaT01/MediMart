@@ -1,7 +1,7 @@
 from flask import request, jsonify, Blueprint
 from app import db
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity,  get_jwt, JWTManager, create_refresh_token 
-from app.models import User, Product, Order
+from app.models import User, Product, Order, Category
 from flask_bcrypt import Bcrypt
 # import bcrypt
 import jwt
@@ -250,3 +250,7 @@ def delete_order(order_id):
     db.session.commit()
     return '', 204
 
+@routes.route('/categories', methods=['GET'])
+def get_categories():
+    categories = Category.query.all()
+    return jsonify([category.as_dict() for category in categories])

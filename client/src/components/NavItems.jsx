@@ -1,23 +1,67 @@
-import React, { useContext } from 'react';
+import React, { useState, useContext, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { UserContext } from './context/userContext';
 import { VscAccount } from "react-icons/vsc";
+import { BsCartPlus } from "react-icons/bs";
 
 const NavItems = () => {
   const { currentUser, logout } = useContext(UserContext);
+  const [showPopover, setShowPopover] = useState(false);
+  const timeoutRef = useRef(null);
+
+  const handleMouseEnter = () => {
+    clearTimeout(timeoutRef.current);
+    setShowPopover(true);
+  };
+
+  const handleMouseLeave = () => {
+    timeoutRef.current = setTimeout(() => setShowPopover(false), 200); // Small delay before hiding the popover
+  };
+
+  useEffect(() => {
+    return () => clearTimeout(timeoutRef.current); // Cleanup timeout on unmount
+  }, []);
 
   return (
-    <div className='flex items-center gap-5'>
-      
+    <div className='container mx-auto flex justify-between items-center'>
       {currentUser ? (
         <>
-          <Link to="/home" className="bg-transparent py-1 px-2 transition ease-in-out hover:-translate-y-1 hover:scale-110 duration-300 hover:underline">Home</Link>
-          <Link to="/products" className="bg-transparent py-1 px-2 transition ease-in-out hover:-translate-y-1 hover:scale-110 duration-300 hover:underline">Products</Link>
-          <Link to="/about" className="bg-transparent py-1 px-2 transition ease-in-out hover:-translate-y-1 hover:scale-110 duration-300 hover:underline">About Us</Link>
-          <Link to="/contact" className="bg-transparent py-1 px-2 transition ease-in-out hover:-translate-y-1 hover:scale-110 duration-300 hover:underline">Contact</Link>
-          {/* <button className="text-black bg-blue-300">Welcome, {currentUser.name} </button> */}
-          <button><VscAccount size={28}/></button>
-          <button onClick={logout} className="bg-blue-400 hover:bg-blue-300/90 py-1 px-2 transition ease-in-out hover:-translate-y-1 hover:scale-110 duration-300">Logout</button>
+          <h1 className="text-2xl font-bold">MediMart</h1>
+            <div className='flex items-center'>
+              <Link to="/home" className="bg-transparent py-1 px-2 transition ease-in-out hover:-translate-y-1 hover:scale-110 duration-300 hover:underline">Home</Link>
+              <Link to="/products" className="bg-transparent py-1 px-2 transition ease-in-out hover:-translate-y-1 hover:scale-110 duration-300 hover:underline">Products</Link>
+              <Link to="/about" className="bg-transparent py-1 px-2 transition ease-in-out hover:-translate-y-1 hover:scale-110 duration-300 hover:underline">About Us</Link>
+              <Link to="/contact" className="bg-transparent py-1 px-2 transition ease-in-out hover:-translate-y-1 hover:scale-110 duration-300 hover:underline">Contact</Link>
+            </div>
+            <div className='flex items-center gap-2'>
+              <div
+                className="relative"
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
+                >
+                <button className="flex items-center flex-col">
+                <VscAccount size={23} />
+                <span className="mt-1 text-xs">My Account</span>
+                </button>
+                {showPopover && (
+                  <div
+                    className="absolute right-0 mt-2 w-64 bg-white rounded-md shadow-lg py-2 z-10"
+                    onMouseEnter={handleMouseEnter}
+                    onMouseLeave={handleMouseLeave}
+                  >
+                  <div className="px-4 py-2 text-gray-700 border-b">Welome, {currentUser.name}</div>
+                    <Link to="/orders" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">Orders</Link>
+                    <Link to="/favorites" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">Favourites</Link>
+                    <Link to="/account-settings" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">Account Settings</Link>
+                    <button onClick={logout} className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100">Logout</button>
+                  </div>
+                )}
+              </div>
+              <button className="relative flex items-center gap-0">
+              <BsCartPlus className="w-7 h-7 fill-blue-500 hover:fill-blue-300"/>
+              </button>
+            </div>
+            
         </>
       ) : (
         <>
