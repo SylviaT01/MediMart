@@ -1,25 +1,27 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import { GrSearch } from "react-icons/gr";
 
 const ProductList = () => {
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState('');
-  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
 
   // Fetch products from API
   useEffect(() => {
-    fetch('http://127.0.0.1:5000/products')
-      .then(response => response.json())
-      .then(data => {
+    fetch("http://127.0.0.1:5000/products")
+      .then((response) => response.json())
+      .then((data) => {
         setProducts(data);
         setFilteredProducts(data); // Initially set products as filtered products
         // Extract unique categories from products
-        const uniqueCategories = Array.from(new Set(data.map(product => product.category)));
+        const uniqueCategories = Array.from(
+          new Set(data.map((product) => product.category_name))
+        );
         setCategories(uniqueCategories);
       })
-      .catch(error => console.error('Error fetching products:', error));
+      .catch((error) => console.error("Error fetching products:", error));
   }, []);
 
   // Handle category filter change
@@ -39,11 +41,15 @@ const ProductList = () => {
     let filtered = products;
 
     if (category) {
-      filtered = filtered.filter(product => product.category === category);
+      filtered = filtered.filter(
+        (product) => product.category_name === category
+      );
     }
 
     if (query) {
-      filtered = filtered.filter(product => product.title.toLowerCase().includes(query.toLowerCase()));
+      filtered = filtered.filter((product) =>
+        product.title.toLowerCase().includes(query.toLowerCase())
+      );
     }
 
     setFilteredProducts(filtered);
@@ -65,8 +71,10 @@ const ProductList = () => {
           onChange={(e) => handleCategoryChange(e.target.value)}
         >
           <option value="">All Categories</option>
-          {categories.map(category => (
-            <option key={category} value={category}>{category}</option>
+          {categories.map((category) => (
+            <option key={category} value={category}>
+              {category}
+            </option>
           ))}
         </select>
         {/* Search bar */}
@@ -78,11 +86,19 @@ const ProductList = () => {
           onChange={(e) => handleSearchChange(e.target.value)}
         />
         {/* Search button */}
-        <button className="bg-blue-300 hover:bg-blue-200/90 p-2 py-2 rounded border" onClick={handleSearchClick}><GrSearch /></button>
+        <button
+          className="bg-blue-300 hover:bg-blue-200/90 p-2 py-2 rounded border"
+          onClick={handleSearchClick}
+        >
+          <GrSearch />
+        </button>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 max-w-screen-xl bg-blue-50 z-100 px-4 py-4">
-        {filteredProducts.map(product => (
-          <div key={product.id} className="border p-4 flex flex-col justify-between shadow-xl rounded-lg overflow-hidden bg-white">
+        {filteredProducts.map((product) => (
+          <div
+            key={product.id}
+            className="border p-4 flex flex-col justify-between shadow-xl rounded-lg overflow-hidden bg-white"
+          >
             <h2 className="font-medium text-lg mb-2 overflow-hidden relative">
               <span className="marquee">{product.title}</span>
             </h2>
@@ -97,9 +113,13 @@ const ProductList = () => {
               </div>
             </div>
             <div className="flex flex-col gap-2">
-              <div className="text-sm text-gray-500 capitalize">{product.category}</div>
-              <div className="text-lg font-semibold">{product.price}</div>
-              <button className="bg-blue-300 hover:bg-blue-200 text-white py-1 px-2 rounded-md transition duration-300 ease-in-out">Buy Now</button>
+              <div className="text-sm text-gray-500 capitalize">
+                {product.category_name}
+              </div>
+              <div className="text-lg font-semibold">Ksh {product.price}</div>
+              <button className="bg-blue-300 hover:bg-blue-200 text-white py-1 px-2 rounded-md transition duration-300 ease-in-out">
+                Buy Now
+              </button>
             </div>
           </div>
         ))}
