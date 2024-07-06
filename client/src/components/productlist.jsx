@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { GrSearch } from "react-icons/gr";
 
-const ProductList = () => {
+const ProductList = ({ setCart }) => {
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
+  // const [cart, setCart] = useState([]);
 
   // Fetch products from API
   useEffect(() => {
@@ -58,6 +59,33 @@ const ProductList = () => {
   // Handle search button click
   const handleSearchClick = () => {
     filterProducts(selectedCategory, searchQuery);
+  };
+
+  // Handle adding to cart
+  const handleAddToCart = (product) => {
+    // Create a new order (Assuming user_id is 1 for simplicity)
+    const order = {
+      user_id: 1,
+      product_id: product.id,
+      quantity: 1,
+      price: product.price,
+      total_price: product.price,
+    };
+
+    fetch("http://127.0.0.1:5000/orders", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(order),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Order created:", data);
+        // Update cart state
+        setCart((prevCart) => [...prevCart, data]);
+      })
+      .catch((error) => console.error("Error creating order:", error));
   };
 
   return (
@@ -115,11 +143,12 @@ const ProductList = () => {
               <div className="text-sm text-gray-500 capitalize">
                 {product.category_name}
               </div>
-              <div className="text-lg font-semibold">
-                Ksh {product.price.toLocaleString()}
-              </div>
-              <button className="bg-blue-300 hover:bg-blue-200 text-white py-1 px-2 rounded-md transition duration-300 ease-in-out">
-                Buy Now
+              <div className="text-lg font-semibold">Ksh {product.price}</div>
+              <button
+                className="bg-blue-300 hover:bg-blue-200 text-white py-1 px-2 rounded-md transition duration-300 ease-in-out"
+                onClick={() => handleAddToCart(product)}
+              >
+                Add to Cart
               </button>
             </div>
           </div>
