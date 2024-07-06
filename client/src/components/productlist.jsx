@@ -106,7 +106,7 @@ const ProductList = () => {
                 <img
                   src={product.image_url}
                   alt={product.title}
-                  className="p-4 mr-2 w-60 h-60 object-contain transition duration-300 ease-in-out transform group-hover:scale-110"
+                  className="mx-auto p-4 w-60 h-60 object-contain transition duration-300 ease-in-out transform group-hover:scale-110"
                   style={{ maxHeight: "300px" }}
                 />
               </div>
