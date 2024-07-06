@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { GrSearch } from "react-icons/gr";
+import { CartContext } from './context/cartContext';
 
 const ProductList = ({ setCart }) => {
   const [products, setProducts] = useState([]);
@@ -7,7 +8,7 @@ const ProductList = ({ setCart }) => {
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
-  // const [cart, setCart] = useState([]);
+  const { addToCart } = useContext(CartContext);
 
   // Fetch products from API
   useEffect(() => {
@@ -83,7 +84,7 @@ const ProductList = ({ setCart }) => {
       .then((data) => {
         console.log("Order created:", data);
         // Update cart state
-        setCart((prevCart) => [...prevCart, data]);
+        addToCart(product);
       })
       .catch((error) => console.error("Error creating order:", error));
   };

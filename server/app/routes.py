@@ -11,16 +11,7 @@ bcrypt = Bcrypt()
 
 routes = Blueprint("routes", __name__)
 
-# @routes.route("/login", methods=["POST"])
-# def login():
-#     email = request.json.get("email", None)
-#     password = request.json.get("password", None)
-#     user = User.query.filter_by(email=email).first()
-#     if user and bcrypt.check_password_hash(user.password, password):
-#         access_token = create_access_token(identity=user.id)
-#         return jsonify({"access_token":access_token})
-#     else:
-#         return jsonify({"message":"Invalid username or password"}), 401
+
 
 @routes.route('/login', methods=['POST'])
 def login():
@@ -211,8 +202,6 @@ def create_order():
         data = request.get_json()
         if not data or not all(key in data for key in ('user_id', 'product_id', 'quantity', 'total_price')):
             return jsonify({"error": "Invalid data"}), 400
-<<<<<<< HEAD
-=======
 
         new_order = Order(
             user_id=data['user_id'],
@@ -228,27 +217,15 @@ def create_order():
     except Exception as e:
         print(f"Error creating order: {e}")
         return jsonify({"error": "An error occurred while creating the order"}), 500
->>>>>>> 4b19f8f (create cartModal to handle the orders)
-
-        new_order = Order(
-            user_id=data['user_id'],
-            product_id=data['product_id'],
-            quantity=data['quantity'],
-            price=data.get('price'),  # Get the price from the data if available
-            total_price=data['total_price'],
-            order_date=datetime.utcnow()
-        )
-        db.session.add(new_order)
-        db.session.commit()
-        return jsonify(new_order.as_dict()), 201
-    except Exception as e:
-        print(f"Error creating order: {e}")
-        return jsonify({"error": "An error occurred while creating the order"}), 500
+    
 #Get all orders
 @routes.route('/orders', methods=['GET'])
+@jwt_required()
 def get_orders():
-    orders = Order.query.all()
-    return jsonify([order.as_dict() for order in orders])
+    current_user_id = get_jwt_identity()
+    orders = Order.query.filter_by(user_id=current_user_id).all()
+    return jsonify([order.as_dict() for order in orders]), 200
+
 
 # Get a single order
 @routes.route('/orders/<int:order_id>', methods=['GET'])
@@ -272,8 +249,13 @@ def update_order(order_id):
 @routes.route('/orders/<int:order_id>', methods=['DELETE'])
 def delete_order(order_id):
     order = Order.query.get(order_id)
+
+    if not order:
+        return jsonify({'error': 'Order not found'}), 404
+    
     db.session.delete(order)
     db.session.commit()
+    
     return '', 204
 
 @routes.route('/categories', methods=['GET'])
