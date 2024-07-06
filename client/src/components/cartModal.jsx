@@ -10,10 +10,10 @@ const CartModal = ({ isOpen, toggleModal }) => {
     toggleModal();
   };
 
-  const handleDelete = async (product_id) => {
+  const handleDelete = async (order_id) => {
     try {
-      console.log('Deleting order with ID:', product_id);
-      const response = await fetch(`http://127.0.0.1:5000/orders/${product_id}`, {
+      console.log('Deleting order with ID:', order_id);
+      const response = await fetch(`http://127.0.0.1:5000/orders/${order_id}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${authToken}`
@@ -26,13 +26,12 @@ const CartModal = ({ isOpen, toggleModal }) => {
       }
   
       // Assuming removeFromCart function updates local state in CartContext
-      removeFromCart(product_id);
+      removeFromCart(order_id);
   
     } catch (error) {
       console.error('Error deleting order:', error);
     }
   };
-  
   
   useEffect(() => {
     const fetchOrders = async () => {
@@ -93,9 +92,12 @@ const CartModal = ({ isOpen, toggleModal }) => {
                 <div>
                   {cart.map((order) => (
                     <div key={order.product_id} className="flex justify-between items-center py-4">
+                      <div className="flex items-center">
+                      <img src={order.product_image} alt="Product" className="w-16 h-16 object-cover mr-4" />
                       <div>
                         <h4 className="text-lg font-medium">Name: {order.product_title}</h4>
                         <p className="text-sm text-gray-600">Price: {order.price}</p>
+                      </div>
                       </div>
                       <div>
                         <p className="text-lg font-medium">Ksh {order.total_price}</p>
