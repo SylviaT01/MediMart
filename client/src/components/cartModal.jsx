@@ -1,6 +1,6 @@
-import React, { useEffect, useContext } from 'react';
-import { CartContext } from './context/cartContext';
-import { UserContext } from './context/userContext';
+import React, { useEffect, useContext } from "react";
+import { CartContext } from "./context/cartContext";
+import { UserContext } from "./context/userContext";
 
 const CartModal = ({ isOpen, toggleModal }) => {
   const { cart, removeFromCart } = useContext(CartContext);
@@ -9,46 +9,22 @@ const CartModal = ({ isOpen, toggleModal }) => {
   const handleClose = () => {
     toggleModal();
   };
-
-  const handleDelete = async (order_id) => {
-    try {
-      console.log('Deleting order with ID:', order_id);
-      const response = await fetch(`http://127.0.0.1:5000/orders/${order_id}`, {
-        method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${authToken}`
-        }
-      });
-  
-      if (!response.ok) {
-        const errorMessage = await response.text();
-        throw new Error(`Failed to delete order: ${errorMessage}`);
-      }
-  
-      // Assuming removeFromCart function updates local state in CartContext
-      removeFromCart(order_id);
-  
-    } catch (error) {
-      console.error('Error deleting order:', error);
-    }
-  };
-  
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await fetch('http://127.0.0.1:5000/orders', {
+        const response = await fetch("http://127.0.0.1:5000/orders", {
           headers: {
-            'Authorization': `Bearer ${authToken}`,
-            'Content-Type': 'application/json'
-          }
+            Authorization: `Bearer ${authToken}`,
+            "Content-Type": "application/json",
+          },
         });
         if (!response.ok) {
-          throw new Error('Failed to fetch orders');
+          throw new Error("Failed to fetch orders");
         }
         const data = await response.json();
-        console.log('Fetched orders:', data);
+        console.log("Fetched orders:", data);
       } catch (error) {
-        console.error('Error fetching orders:', error);
+        console.error("Error fetching orders:", error);
       }
     };
 
@@ -56,7 +32,29 @@ const CartModal = ({ isOpen, toggleModal }) => {
       fetchOrders();
     }
   }, [isOpen, authToken]);
+  const handleDelete = async (order_id) => {
+    try {
+      console.log("Deleting order with ID:", order_id);
+      const response = await fetch(`http://127.0.0.1:5000/orders/${order_id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+      });
 
+      if (!response.ok) {
+        const errorMessage = await response.text();
+        throw new Error(`Failed to delete order: ${errorMessage}`);
+      }
+
+      // Assuming removeFromCart function updates local state in CartContext
+      removeFromCart(order_id);
+    } catch (error) {
+      console.error("Error deleting order:", error);
+    }
+  };
+
+  console.log(cart);
   return (
     <>
       {isOpen && (
@@ -91,20 +89,33 @@ const CartModal = ({ isOpen, toggleModal }) => {
               ) : (
                 <div>
                   {cart.map((order) => (
-                    <div key={order.product_id} className="flex justify-between items-center py-4">
+                    <div
+                      key={order.product_id}
+                      className="flex justify-between items-center py-4"
+                    >
                       <div className="flex items-center">
-                      <img src={order.product_image} alt="Product" className="w-16 h-16 object-cover mr-4" />
-                      <div>
-                        <h4 className="text-lg font-medium">Name: {order.product_title}</h4>
-                        <p className="text-sm text-gray-600">Price: {order.price}</p>
+                        <img
+                          src={order.image_url}
+                          alt="Product"
+                          className="w-16 h-16 object-cover mr-4"
+                        />
+                        <div>
+                          <h4 className="text-lg font-medium">
+                            Name: {order.title}
+                          </h4>
+                          <p className="text-sm text-gray-600">
+                            Price: {order.price}
+                          </p>
+                        </div>
                       </div>
-                      </div>
                       <div>
-                        <p className="text-lg font-medium">Ksh {order.total_price}</p>
+                        <p className="text-lg font-medium">
+                          Ksh {order.total_price}
+                        </p>
                       </div>
                       <button
                         className="text-red-600 hover:text-red-800"
-                        onClick={() => handleDelete(order.product_id)}
+                        onClick={() => handleDelete(order.id)}
                       >
                         Delete
                       </button>
@@ -112,11 +123,19 @@ const CartModal = ({ isOpen, toggleModal }) => {
                   ))}
                   <div className="flex justify-between items-center border-t border-gray-200 pt-4">
                     <h4 className="text-lg font-medium">Total:</h4>
-                    <p className="text-lg font-medium">Ksh {cart.reduce((total, order) => total + order.total_price, 0)}</p>
+                    <p className="text-lg font-medium">
+                      Ksh{" "}
+                      {cart.reduce(
+                        (total, order) => total + order.total_price,
+                        0
+                      )}
+                    </p>
                   </div>
                   <button
                     className="bg-blue-300 hover:bg-blue-200 text-white py-2 px-4 rounded-md mt-4 w-full"
-                    onClick={() => {/* Handle checkout */}}
+                    onClick={() => {
+                      /* Handle checkout */
+                    }}
                   >
                     Checkout
                   </button>
