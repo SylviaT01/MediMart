@@ -12,6 +12,7 @@ import { UserProvider, UserContext } from './components/context/userContext';
 import { CartProvider } from './components/context/cartContext';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
+import Footer from './components/footer';
 
 function AppContent() {
   useEffect(() => {
@@ -38,6 +39,7 @@ function AppContent() {
           <Route path="/contact" element={authToken ? <Contact /> : <Navigate to="/login" />} />
         </Routes>
       </div>
+      <Footer />
     </div>
   );
 }
