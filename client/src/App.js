@@ -8,6 +8,7 @@ import AboutUs from './components/About';
 import Login from './components/login';
 import SignUp from './components/signup';
 import Contact from './components/Contact';
+import CartModal from './components/cartModal';
 import { UserProvider, UserContext } from './components/context/userContext';
 import { CartProvider } from './components/context/cartContext';
 import AOS from 'aos';
@@ -37,6 +38,7 @@ function AppContent() {
           <Route path="/products" element={authToken ? <ProductList /> : <Navigate to="/login" />} />
           <Route path="/about" element={authToken ? <AboutUs /> : <Navigate to="/login" />} />
           <Route path="/contact" element={authToken ? <Contact /> : <Navigate to="/login" />} />
+          <Route path="/cart" element={authToken ? <CartModal /> : <Navigate to="/login" />} />
         </Routes>
       </div>
       <Footer />
