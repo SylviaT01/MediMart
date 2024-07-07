@@ -43,10 +43,35 @@ export const UserProvider = ({ children }) => {
     const nav = useNavigate();
     const [authToken, setAuthToken] = useState(() => localStorage.getItem('token') ? localStorage.getItem('token') : null);
     const [currentUser, setCurrentUser] = useState(null);
+    const [loading, setLoading] = useState(true); // New state for loading
 
-    console.log('====================================');
-    console.log(authToken);
-    console.log('====================================');
+    // Fetch current user details if authToken exists
+    const fetchCurrentUser = async () => {
+        if (authToken) {
+            try {
+                const response = await fetchWithAuth('http://127.0.0.1:5000/current_user', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                const data = await response.json();
+                if (response.ok) {
+                    setCurrentUser(data);
+                } else {
+                    console.error('Failed to fetch current user:', data.message);
+                }
+            } catch (error) {
+                console.error('Error fetching current user:', error);
+            }
+        }
+        setLoading(false); // Set loading to false after attempting to fetch the current user
+    };
+
+    // Initialize by fetching current user if token exists
+    useEffect(() => {
+        fetchCurrentUser();
+    }, [authToken]);
 
     // Register User
     const signup = (name, email, password) => {
@@ -121,6 +146,7 @@ export const UserProvider = ({ children }) => {
             console.log(res);
             if (res.success) {
                 setAuthToken(null);
+                setCurrentUser(null);
                 localStorage.removeItem('token');
                 localStorage.removeItem('refresh_token');
                 nav('/login');
@@ -130,29 +156,13 @@ export const UserProvider = ({ children }) => {
         });
     };
 
-    useEffect(() => {
-        if (authToken) {
-            fetchWithAuth('http://127.0.0.1:5000/current_user', {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
-            .then(res => res.json())
-            .then(res => {
-                setCurrentUser(res);
-            });
-        } else {
-            setCurrentUser(null);
-        }
-    }, [authToken]);
-
     const contextData = {
         currentUser,
         signup,
         login,
         logout,
-        authToken
+        authToken,
+        loading 
     };
 
     return (
