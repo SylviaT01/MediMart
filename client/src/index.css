@@ -33,3 +33,29 @@ code {
   animation: marquee 30s linear infinite;
   white-space: nowrap;
 }
+
+@keyframes flip-left {
+  0% {
+    transform: rotateY(0deg);
+  }
+  100% {
+    transform: rotateY(-180deg);
+  }
+}
+
+@keyframes flip-right {
+  0% {
+    transform: rotateY(0deg);
+  }
+  100% {
+    transform: rotateY(180deg);
+  }
+}
+
+.hover\:flip-left:hover .icon-container {
+  animation: flip-left 0.6s forwards;
+}
+
+.hover\:flip-right:hover .icon-container {
+  animation: flip-right 0.6s forwards;
+}

@@ -6,8 +6,9 @@ import Video1 from './assets/inject.mp4';
 import Video2 from './assets/Pharm2.mp4';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHeadset, faUserMd, faSoap, faCapsules, faPills,  faTruck } from '@fortawesome/free-solid-svg-icons';
+import 'aos/dist/aos.css';  
 
 
 const Home = () => {
@@ -20,16 +21,27 @@ const Home = () => {
     autoplay: true,
     autoplaySpeed: 3000,
   };
+
+  const features = [
+    { icon: faPills, title: "Prescription Medications", animation: "flip-left" },
+    { icon: faCapsules, title: "Over-the-Counter Medications", animation: "flip-right" },
+    { icon: faSoap, title: "Personal Care Products", animation: "flip-left"},
+    { icon: faUserMd, title: "Consultation Services", animation: "flip-right"},
+    { icon: faHeadset, title: "Customer Support", animation: "flip-left" },
+    { icon: faTruck, title: "Home Delivery", animation: "flip-right" },
+
+  ];
+
   return (
     <div className="bg-gray-100">
       {/* Hero section */}
-      <div className="relative text-white h-400px">
+      <div className="relative text-white">
 
         {/* Video container */}
         <div className="w-full max-w-full overflow-hidden relative">
         <Slider {...settings}>
           <div className="relative">
-            <video className="w-full h-svh object-cover" autoPlay loop muted playsInline >
+            <video className="w-full object-cover" style={{ height: '400px' }} autoPlay loop muted playsInline >
               <source src={Video} type="video/mp4" />
             </video>
             <div className="absolute inset-0 flex flex-col justify-center items-center text-center text-white">
@@ -39,7 +51,7 @@ const Home = () => {
             </div>
           </div>
           <div className="relative">
-            <video className="w-full h-svh object-cover" autoPlay loop muted playsInline >
+            <video className="w-full  object-cover" style={{ height: '400px' }} autoPlay loop muted playsInline >
               <source src={Video1} type="video/mp4" />
             </video>
             <div className="absolute inset-0 flex flex-col justify-center items-center text-center text-white">
@@ -49,7 +61,7 @@ const Home = () => {
             </div>
           </div>
           <div className="relative">
-            <video className="w-full h-svh object-cover" autoPlay loop muted playsInline >
+            <video className="w-full object-cover" style={{ height: '400px' }} autoPlay loop muted playsInline >
               <source src={Video2} type="video/mp4" />
             </video>
             <div className="absolute inset-0 flex flex-col justify-center items-center text-center text-white">
@@ -61,6 +73,21 @@ const Home = () => {
         </Slider>
         </div>
       </div>
+
+      <div className="bg-gray-100 py-12">
+      <div className="container mx-auto px-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-6">
+          {features.map((feature, index) => (
+            <div key={index} className={`flex flex-col items-center text-center transform transition duration-300 ease-in-out hover:scale-105 ${feature.animation}`}>
+              <div className="w-24 h-24 flex items-center justify-center bg-slate-100 rounded-full mb-4 border border-blue-200">
+              <FontAwesomeIcon icon={feature.icon} className="text-blue-400 text-4xl" />
+              </div>
+              <p className="text-center text-gray-800 text-sm font-semibold">{feature.title}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
 
       {/* Features section */}
       <section className="py-20">
@@ -98,8 +125,6 @@ const Home = () => {
           </div>
         </div>
       </section>
-
-      {/* Contact section */}
       
     </div>
   );
