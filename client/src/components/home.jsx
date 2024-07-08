@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Slider from 'react-slick';
 import { Link } from 'react-router-dom';
 import Video from './assets/Video1.mp4';
@@ -12,6 +12,7 @@ import 'aos/dist/aos.css';
 
 
 const Home = () => {
+  const [loading, setLoading] = useState(true);
   const settings = {
     dots: true,
     infinite: true,
@@ -87,7 +88,7 @@ const Home = () => {
           ))}
         </div>
       </div>
-    </div>
+      </div>
 
       {/* Features section */}
       <section className="py-20">
@@ -125,7 +126,28 @@ const Home = () => {
           </div>
         </div>
       </section>
-      
+      <div className='flex md:px-16 xl:px-44  flex-col md:grid grid-cols-2 gap-16 mx-auto w-full p-8 pb-16'>
+				<div className='flex flex-col justify-center items-start mt-12 '>
+					<h1 className='text-[#102a42] md:text-4xl lg:text-6xl font-extrabold mb-4'>
+          Your Trusted Source for  <br /> Health and Wellness
+					</h1>
+					<h5 className='text-[#617d98] text-xl leading-7'>
+          Discover a wide range of medications and  <br /> personal care products.Explore our comprehensive selection of  <br /> prescription and over-the-counter medications.
+					</h5>
+          
+					<Link to='/products'>
+						<button className='bg-[#7fbdf0] transition-all duration-300 ease-linear hover:scale-105 hover:bg-[#a2ccf3] text-white px-6 md:px-12 tracking-widest rounded-md py-3 mt-4 md:py-4'>Shop Now</button>
+					</Link>
+				</div>
+				<article className='mt-12 hidden md:flex justify-end relative  self-end w-full'>
+					<div className='relative after flex justify-end before:bg-[#decbc0]'>
+						<img src='https://img.freepik.com/free-photo/closeup-doctor-stethoscope-with-coffee-paper-cup_53876-31272.jpg?t=st=1720465314~exp=1720468914~hmac=fc241ad3a0413f90b7494b93081c9d2216193c6000860ff27994ffdc3ee4cb68&w=360' alt='hero-img' width={400} height={550} className={`${loading ? 'shimmer' : ''}`} onLoadingComplete={() => setLoading(false)} />
+						<div className='absolute left-0 -translate-x-1/2 bottom-0 '>
+							<img src='https://img.freepik.com/free-photo/young-sick-man-friend-having-video-call-with-doctor_23-2148944901.jpg?t=st=1720467814~exp=1720471414~hmac=da49d41430aecc81d919c70a931b6a249cc6fb8019edda506eab7ddab9392c48&w=740' alt='hero-img' width={250} height={165} className={`${loading ? 'shimmer' : ''}`} onLoadingComplete={() => setLoading(false)} />
+						</div>
+					</div>
+				</article>
+			</div>
     </div>
   );
 };
