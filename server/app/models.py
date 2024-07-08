@@ -42,6 +42,7 @@ class Order(db.Model):
     price = db.Column(db.Integer, nullable=False)
     total_price = db.Column(db.Integer, nullable=False)
     order_date = db.Column(db.DateTime, nullable=False)
+    
 
     def as_dict(self):
         return {col.name: getattr(self, col.name) for col in self.__table__.columns}

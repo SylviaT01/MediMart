@@ -20,7 +20,7 @@ function AppContent() {
     AOS.init({ duration: 1000 });
   }, []);
 
-  const { authToken, loading } = useContext(UserContext);
+  const { currentUser, loading } = useContext(UserContext);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -33,12 +33,12 @@ function AppContent() {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
-          <Route path="/" element={authToken ? <Navigate to="/home" /> : <Login />} />
-          <Route path="/home" element={authToken ? <Home /> : <Navigate to="/login" />} />
-          <Route path="/products" element={authToken ? <ProductList /> : <Navigate to="/login" />} />
-          <Route path="/about" element={authToken ? <AboutUs /> : <Navigate to="/login" />} />
-          <Route path="/contact" element={authToken ? <Contact /> : <Navigate to="/login" />} />
-          <Route path="/cart" element={authToken ? <CartModal /> : <Navigate to="/login" />} />
+          <Route path="/" element={currentUser ? <Navigate to="/home" /> : <Login />} />
+          <Route path="/home" element={currentUser ? <Home /> : <Navigate to="/home" />} />
+          <Route path="/products" element={currentUser ? <ProductList /> : <Navigate to="/home" />} />
+          <Route path="/about" element={currentUser ? <AboutUs /> : <Navigate to="/home" />} />
+          <Route path="/contact" element={currentUser ? <Contact /> : <Navigate to="/home" />} />
+          <Route path="/cart" element={currentUser ? <CartModal /> : <Navigate to="/home" />} />
         </Routes>
       </div>
       <Footer />

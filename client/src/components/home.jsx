@@ -23,7 +23,7 @@ const Home = () => {
   return (
     <div className="bg-gray-100">
       {/* Hero section */}
-      <div className="relative text-white">
+      <div className="relative text-white h-400px">
 
         {/* Video container */}
         <div className="w-full max-w-full overflow-hidden relative">

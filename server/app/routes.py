@@ -57,15 +57,6 @@ def logout():
     return jsonify({"success":"Logged out successfully"}), 200
 
     
-# #Add user
-# @routes.route('/users', methods=['POST'])
-# def create_user():
-#     data = request.get_json()
-#     hashed_password = bcrypt.generate_password_hash(data['password']).decode('utf-8')
-#     new_user = User(name=data['name'], email=data['email'], password=hashed_password)
-#     db.session.add(new_user)
-#     db.session.commit()
-#     return jsonify(new_user.as_dict()), 201
 
 @routes.route('/users', methods=['POST'])
 def create_user():
@@ -126,22 +117,6 @@ def update_user(user_id):
         db.session.rollback()
         return jsonify({'error': str(e)}), 500
 
-# Add products
-# @routes.route('/products', methods=['POST'])
-# def create_product():
-#     data = request.get_json()
-#     new_product = Product(
-#         name=data['name'],
-#         image_url=data['image_url'],
-#         description=data['description'],
-#         category=data['category'],
-#         price=data['price'],
-#         is_in_stock=data['is_in_stock']
-#     )
-#     db.session.add(new_product)
-#     db.session.commit()
-#     return jsonify(new_product.as_dict()), 201
-
 # Delete
 @routes.route('/users/<int:id>', methods=['DELETE'])
 @jwt_required()
@@ -172,20 +147,6 @@ def get_product(product_id):
     product = Product.query.get(product_id)
     return jsonify(product.as_dict())
 
-#Add new product
-# @routes.route('/products/<int:product_id>', methods=['PUT'])
-# def update_product(product_id):
-#     data = request.get_json()
-#     product = Product.query.get(product_id)
-#     product.name = data['name']
-#     product.image_url = data['image_url']
-#     product.description = data['description']
-#     product.category = data['category']
-#     product.price = data['price']
-#     product.is_in_stock = data['is_in_stock']
-#     db.session.commit()
-#     return jsonify(product.as_dict())
-
 # Delete product
 @routes.route('/products/<int:product_id>', methods=['DELETE'])
 def delete_product(product_id):
@@ -193,23 +154,26 @@ def delete_product(product_id):
     db.session.delete(product)
     db.session.commit()
     return '', 204
-
-# Add new order
-# Add new order
+  
 @routes.route('/orders', methods=['POST'])
+@jwt_required()
 def create_order():
     try:
         data = request.get_json()
-        if not data or not all(key in data for key in ('user_id', 'product_id', 'quantity', 'total_price')):
+        user_id = get_jwt_identity()
+        session_token = get_jwt()["jti"] 
+
+        if not data or not all(key in data for key in ('product_id', 'quantity', 'total_price')):
             return jsonify({"error": "Invalid data"}), 400
 
         new_order = Order(
-            user_id=data['user_id'],
+            user_id=user_id,
             product_id=data['product_id'],
             quantity=data['quantity'],
-            price=data.get('price'),  # Get the price from the data if available
+            price=data.get('price'), 
             total_price=data['total_price'],
-            order_date=datetime.utcnow()
+            order_date=datetime.utcnow(),
+            session_token=session_token 
         )
         db.session.add(new_order)
         db.session.commit()
@@ -217,33 +181,19 @@ def create_order():
     except Exception as e:
         print(f"Error creating order: {e}")
         return jsonify({"error": "An error occurred while creating the order"}), 500
-    
+
+
+
 #Get all orders
 @routes.route('/orders', methods=['GET'])
 @jwt_required()
 def get_orders():
     current_user_id = get_jwt_identity()
+
     orders = Order.query.filter_by(user_id=current_user_id).all()
     return jsonify([order.as_dict() for order in orders]), 200
 
 
-# Get a single order
-@routes.route('/orders/<int:order_id>', methods=['GET'])
-def get_order(order_id):
-    order = Order.query.get(order_id)
-    return jsonify(order.as_dict())
-
-# Update order
-@routes.route('/orders/<int:order_id>', methods=['PUT'])
-def update_order(order_id):
-    data = request.get_json()
-    order = Order.query.get(order_id)
-    order.user_id = data['user_id']
-    order.product_id = data['product_id']
-    order.quantity = data['quantity']
-    order.total_price = data['total_price']
-    db.session.commit()
-    return jsonify(order.as_dict())
 
 # Delete order
 @routes.route('/orders/<int:order_id>', methods=['DELETE'])
@@ -258,7 +208,77 @@ def delete_order(order_id):
     
     return '', 204
 
+
 @routes.route('/categories', methods=['GET'])
 def get_categories():
     categories = Category.query.all()
     return jsonify([category.as_dict() for category in categories])
+
+# @routes.route('/cart', methods=['GET'])
+# @jwt_required()
+# def get_cart():
+#     current_user_id = get_jwt_identity()
+#     cart = Cart.query.filter_by(user_id=current_user_id).first()
+#     if not cart:
+#         cart = Cart(user_id=current_user_id)
+#         db.session.add(cart)
+#         db.session.commit()
+#     cart_products = CartProduct.query.filter_by(cart_id=cart.id).all()
+#     return jsonify([{'product_id': cp.product_id, 'quantity': cp.quantity, 'total_price': cp.total_price} for cp in cart_products])
+
+# @routes.route('/cart', methods=['POST'])
+# @jwt_required()
+# def add_to_cart():
+#     current_user_id = get_jwt_identity()
+#     cart = Cart.query.filter_by(user_id=current_user_id).first()
+#     if not cart:
+#         cart = Cart(user_id=current_user_id)
+#         db.session.add(cart)
+#         db.session.commit()
+#     data = request.get_json()
+#     product_id = data['product_id']
+#     quantity = data['quantity']
+#     total_price = data['total_price']
+#     cart_product = CartProduct.query.filter_by(cart_id=cart.id, product_id=product_id).first()
+#     if cart_product:
+#         cart_product.quantity += quantity
+#         cart_product.total_price += total_price
+#     else:
+#         cart_product = CartProduct(cart_id=cart.id, product_id=product_id, quantity=quantity, total_price=total_price)
+#         db.session.add(cart_product)
+#     db.session.commit()
+#     return jsonify({'message': 'Product added to cart successfully'})
+
+# @routes.route('/cart/<int:cart_product_id>', methods=['DELETE'])
+# @jwt_required()
+# def remove_from_cart(cart_product_id):
+#     current_user_id = get_jwt_identity()
+#     cart = Cart.query.filter_by(user_id=current_user_id).first()
+#     cart_product = CartProduct.query.get(cart_product_id)
+#     if cart_product and cart_product.cart_id == cart.id:
+#         db.session.delete(cart_product)
+#         db.session.commit()
+#         return jsonify({'message': 'Product removed from cart successfully'})
+#     else:
+#         return jsonify({'error': 'Product not found in cart'}), 404
+
+# @routes.route('/cart/<int:cart_product_id>', methods=['PATCH'])
+# @jwt_required()
+# def update_cart(cart_product_id):
+#     current_user_id = get_jwt_identity()
+#     cart = Cart.query.filter_by(user_id=current_user_id).first()
+#     cart_product = CartProduct.query.get(cart_product_id)
+#     if cart_product and cart_product.cart_id == cart.id:
+#         data = request.get_json()
+#         if 'quantity' in data:
+#             cart_product.quantity = data['quantity']
+#         if 'total_price' in data:
+#             cart_product.total_price = data['total_price']
+#         db.session.commit()
+#         return jsonify({'message': 'Cart updated successfully'})
+#     else:
+#         return jsonify({'error': 'Product not found in cart'}), 404
+
+
+
+    

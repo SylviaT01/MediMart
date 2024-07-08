@@ -2,6 +2,7 @@ import React, { useEffect, useState, useContext } from "react";
 import { GrSearch } from "react-icons/gr";
 import { CartContext } from './context/cartContext';
 
+
 const ProductList = ({ setCart }) => {
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
@@ -9,6 +10,7 @@ const ProductList = ({ setCart }) => {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const { addToCart } = useContext(CartContext);
+  
 
   // Fetch products from API
   useEffect(() => {

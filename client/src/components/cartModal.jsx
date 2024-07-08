@@ -10,6 +10,7 @@ const CartModal = ({ isOpen, toggleModal }) => {
     toggleModal();
   };
   useEffect(() => {
+
     const fetchOrders = async () => {
       try {
         const response = await fetch("http://127.0.0.1:5000/orders", {
@@ -39,6 +40,7 @@ const CartModal = ({ isOpen, toggleModal }) => {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${authToken}`,
+
         },
       });
 
@@ -47,7 +49,7 @@ const CartModal = ({ isOpen, toggleModal }) => {
         throw new Error(`Failed to delete order: ${errorMessage}`);
       }
 
-      // Assuming removeFromCart function updates local state in CartContext
+
       removeFromCart(order_id);
     } catch (error) {
       console.error("Error deleting order:", error);

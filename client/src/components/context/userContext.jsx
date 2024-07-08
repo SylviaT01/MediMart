@@ -30,7 +30,6 @@ const fetchWithAuth = async (url, options = {}) => {
             options.headers['Authorization'] = `Bearer ${refreshData.access_token}`;
             response = await fetch(url, options);
         } else {
-            // Handle refresh token failure (e.g., redirect to login)
             localStorage.removeItem('token');
             localStorage.removeItem('refresh_token');
         }
@@ -41,11 +40,10 @@ const fetchWithAuth = async (url, options = {}) => {
 
 export const UserProvider = ({ children }) => {
     const nav = useNavigate();
-    const [authToken, setAuthToken] = useState(() => localStorage.getItem('token') ? localStorage.getItem('token') : null);
+    const [authToken, setAuthToken] = useState(() => localStorage.getItem('token') || null);
     const [currentUser, setCurrentUser] = useState(null);
-    const [loading, setLoading] = useState(true); // New state for loading
+    const [loading, setLoading] = useState(true);
 
-    // Fetch current user details if authToken exists
     const fetchCurrentUser = async () => {
         if (authToken) {
             try {
@@ -60,20 +58,20 @@ export const UserProvider = ({ children }) => {
                     setCurrentUser(data);
                 } else {
                     console.error('Failed to fetch current user:', data.message);
+                    handleLogout();
                 }
             } catch (error) {
                 console.error('Error fetching current user:', error);
+                handleLogout();
             }
         }
-        setLoading(false); // Set loading to false after attempting to fetch the current user
+        setLoading(false);
     };
 
-    // Initialize by fetching current user if token exists
     useEffect(() => {
         fetchCurrentUser();
     }, [authToken]);
 
-    // Register User
     const signup = (name, email, password) => {
         fetch('http://127.0.0.1:5000/users', {
             method: 'POST',
@@ -81,14 +79,13 @@ export const UserProvider = ({ children }) => {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                name: name,
-                email: email,
-                password: password 
+                name,
+                email,
+                password
             })
         })
         .then(res => res.json())
         .then(res => {
-            console.log('Signup response:', res);
             if (res.success) {
                 nav('/login');
                 alert(res.success);
@@ -104,7 +101,6 @@ export const UserProvider = ({ children }) => {
         });
     };
 
-    // Login User
     const login = (email, password) => {
         fetch('http://127.0.0.1:5000/login', {
             method: 'POST',
@@ -112,17 +108,16 @@ export const UserProvider = ({ children }) => {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                email: email,
-                password: password 
+                email,
+                password
             })
         })
         .then(res => res.json())
         .then(res => {
-            console.log(res);
             if (res.access_token) {
                 setAuthToken(res.access_token);
                 localStorage.setItem('token', res.access_token);
-                localStorage.setItem('refresh_token', res.refresh_token); // Store refresh token
+                localStorage.setItem('refresh_token', res.refresh_token);
                 nav('/home');
                 alert("Login success");
             } else if (res.error) {
@@ -133,7 +128,14 @@ export const UserProvider = ({ children }) => {
         });
     };
 
-    // Logout User
+    const handleLogout = () => {
+        setAuthToken(null);
+        setCurrentUser(null);
+        localStorage.removeItem('token');
+        localStorage.removeItem('refresh_token');
+        nav('/login');
+    };
+
     const logout = () => {
         fetchWithAuth('http://127.0.0.1:5000/logout', {
             method: 'POST',
@@ -143,13 +145,8 @@ export const UserProvider = ({ children }) => {
         })
         .then(res => res.json())
         .then(res => {
-            console.log(res);
             if (res.success) {
-                setAuthToken(null);
-                setCurrentUser(null);
-                localStorage.removeItem('token');
-                localStorage.removeItem('refresh_token');
-                nav('/login');
+                handleLogout();
             } else {
                 alert("Something went wrong");
             }
@@ -162,7 +159,7 @@ export const UserProvider = ({ children }) => {
         login,
         logout,
         authToken,
-        loading 
+        loading
     };
 
     return (
