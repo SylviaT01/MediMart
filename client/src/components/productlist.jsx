@@ -2,7 +2,6 @@ import React, { useEffect, useState, useContext } from "react";
 import { GrSearch } from "react-icons/gr";
 import { CartContext } from "./context/cartContext";
 import { UserContext } from "./context/userContext";
-import { counter } from "@fortawesome/fontawesome-svg-core";
 
 const ProductList = ({ setCart }) => {
   const [products, setProducts] = useState([]);
@@ -164,27 +163,27 @@ const ProductList = ({ setCart }) => {
               </div>
             </div>
             <div className="flex flex-col gap-2">
-              <div className="text-sm text-gray-500 capitalize">
+              <div className="text-xs text-gray-500 capitalize">
                 {product.category_name}
               </div>
-              <div className="text-lg font-semibold">
-                Ksh {product.price.toLocaleString()}*
+              <div className="text-md font-normal">
+                Ksh. {product.price.toLocaleString()}
               </div>
-              <input
+              <div className="flex justify-between items-center">
+                <button
+                className="bg-blue-300 hover:bg-blue-200 text-white text-md py-1 px-2 rounded-sm transition duration-300 ease-in-out"
+                onClick={() => handleAddToCart(product)}
+                >
+                Add to Cart
+                </button>
+                <input
+                className="border border-blue-200 rounded-md px-2 py-1 w-12 "
                 type="number"
                 min="1"
                 value={quantities[product.id] || 1}
-                onChange={(e) =>
-                  handleQuantityChange(product.id, parseInt(e.target.value))
-                }
-                className="border border-gray-300 rounded-md px-2 py-1"
-              />
-              <button
-                className="bg-blue-300 hover:bg-blue-200 text-white py-1 px-2 rounded-md transition duration-300 ease-in-out"
-                onClick={() => handleAddToCart(product)}
-              >
-                Add to Cart
-              </button>
+                onChange={(e) => handleQuantityChange(product.id, parseInt(e.target.value))}
+                />
+              </div>
             </div>
           </div>
         ))}

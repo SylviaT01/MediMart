@@ -1,12 +1,13 @@
-// src/components/ContactPage.jsx
 import React from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
+import Rating from 'react-rating-stars-component';
 
 const Contact = () => {
   const initialValues = {
     name: '',
     email: '',
+    rating: 0, // Initialize rating state
     message: ''
   };
 
@@ -34,7 +35,7 @@ const Contact = () => {
               validationSchema={validationSchema}
               onSubmit={handleSubmit}
             >
-              {({ isSubmitting }) => (
+              {({ isSubmitting, setFieldValue }) => (
                 <Form>
                   <div className="mb-4">
                     <label htmlFor="name" className="block text-gray-700 text-sm font-bold mb-2">
@@ -61,6 +62,16 @@ const Contact = () => {
                       className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     />
                     <ErrorMessage name="email" component="div" className="text-red-500 text-sm mt-1" />
+                  </div>
+                  {/* Rating Component */}
+                  <div className="mb-4">
+                    <label className="block text-gray-700 text-sm font-bold mb-2">Rate Our Services</label>
+                    <Rating
+                      count={5}
+                      onChange={(rating) => setFieldValue('rating', rating)}
+                      size={24}
+                      activeColor="#ffd700"
+                    />
                   </div>
                   <div className="mb-6">
                     <label htmlFor="message" className="block text-gray-700 text-sm font-bold mb-2">
