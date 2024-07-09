@@ -77,7 +77,7 @@ const CartModal = ({ isOpen, toggleModal }) => {
     <>
       {isOpen && (
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-gray-900 bg-opacity-50">
-          <div className="bg-white rounded-lg w-[500px] max-h-[80vh] overflow-y-auto">
+          <div className="bg-white rounded-lg w-[800px] max-h-[80vh] overflow-y-auto">
             <div className="p-6">
               <div className="flex justify-between items-center border-b border-gray-200 pb-4">
                 <h3 className="text-xl font-semibold">Shopping Cart</h3>
@@ -96,17 +96,17 @@ const CartModal = ({ isOpen, toggleModal }) => {
                   {orders.map((order) => (
                     <div
                       key={order.id}
-                      className="flex justify-between items-center py-4"
+                      className="flex justify-between items-center px-4 py-4"
                     >
-                      <div className="flex items-center">
+                      <div className="flex items-center ">
                         <img
                           src={order.product.image_url}
                           alt="Product"
                           className="w-16 h-16 object-cover mr-4"
                         />
                         <div>
-                          <h4 className="text-lg font-medium">
-                            Name: {order.product.title}
+                          <h4 className="text-sm font-medium">
+                            {order.product.title}
                           </h4>
                           <p className="text-sm text-gray-600">
                             Price: {order.product.price.toLocaleString()}
@@ -115,7 +115,7 @@ const CartModal = ({ isOpen, toggleModal }) => {
                       </div>
                       <div>
                         <p className="text-lg font-medium">
-                          Ksh {order.total_price.toLocaleString()}
+                          Ksh {order.price.toLocaleString()} * {order.quantity}
                         </p>
                       </div>
                       <button

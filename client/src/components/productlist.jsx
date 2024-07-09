@@ -2,6 +2,7 @@ import React, { useEffect, useState, useContext } from "react";
 import { GrSearch } from "react-icons/gr";
 import { CartContext } from "./context/cartContext";
 import { UserContext } from "./context/userContext";
+import { counter } from "@fortawesome/fontawesome-svg-core";
 
 const ProductList = ({ setCart }) => {
   const [products, setProducts] = useState([]);
@@ -11,6 +12,7 @@ const ProductList = ({ setCart }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const { addToCart } = useContext(CartContext);
   const { currentUser, authToken } = useContext(UserContext);
+  const [quantities, setQuantities] = useState([]);
   console.log(currentUser);
 
   // Fetch products from API
@@ -40,6 +42,12 @@ const ProductList = ({ setCart }) => {
     setSearchQuery(query);
     filterProducts(selectedCategory, query);
   };
+  const handleQuantityChange = (productId, quantity) => {
+    setQuantities((prevQuantities) => ({
+      ...prevQuantities,
+      [productId]: quantity,
+    }));
+  };
 
   // Filter products based on selected category and search query
   const filterProducts = (category, query) => {
@@ -64,22 +72,22 @@ const ProductList = ({ setCart }) => {
   const handleSearchClick = () => {
     filterProducts(selectedCategory, searchQuery);
   };
-
-  // Handle adding to cart
+  // Handle adding to car
   const handleAddToCart = (product) => {
     const token = authToken || localStorage.getItem("access_token");
     if (!token) {
       console.error("No auth token available");
       return;
     }
+    const quantity = quantities[product.id] || 1;
 
     // Create a new order
     const order = {
       user_id: currentUser.id,
       product_id: product.id,
-      quantity: 1,
+      quantity: quantity,
       price: product.price,
-      total_price: product.price,
+      total_price: product.price * quantity,
     };
 
     fetch("http://127.0.0.1:5000/orders", {
@@ -99,7 +107,7 @@ const ProductList = ({ setCart }) => {
       .then((data) => {
         console.log("Order created:", data);
         // Update cart state
-        addToCart(product);
+        addToCart({ ...product, quantity });
       })
       .catch((error) => console.error("Error creating order:", error));
   };
@@ -160,8 +168,17 @@ const ProductList = ({ setCart }) => {
                 {product.category_name}
               </div>
               <div className="text-lg font-semibold">
-                Ksh {product.price.toLocaleString()}
+                Ksh {product.price.toLocaleString()}*
               </div>
+              <input
+                type="number"
+                min="1"
+                value={quantities[product.id] || 1}
+                onChange={(e) =>
+                  handleQuantityChange(product.id, parseInt(e.target.value))
+                }
+                className="border border-gray-300 rounded-md px-2 py-1"
+              />
               <button
                 className="bg-blue-300 hover:bg-blue-200 text-white py-1 px-2 rounded-md transition duration-300 ease-in-out"
                 onClick={() => handleAddToCart(product)}
