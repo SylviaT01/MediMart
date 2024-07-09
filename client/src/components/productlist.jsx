@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState, useContext } from "react";
 import { GrSearch } from "react-icons/gr";
 import { CartContext } from "./context/cartContext";
@@ -9,10 +10,11 @@ const ProductList = ({ setCart }) => {
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
+  const [sortOption, setSortOption] = useState(""); // State for sorting option
+  const [sortOrder, setSortOrder] = useState("asc"); // Default sort order
   const { addToCart } = useContext(CartContext);
   const { currentUser, authToken } = useContext(UserContext);
   const [quantities, setQuantities] = useState([]);
-  console.log(currentUser);
 
   // Fetch products from API
   useEffect(() => {
@@ -41,6 +43,8 @@ const ProductList = ({ setCart }) => {
     setSearchQuery(query);
     filterProducts(selectedCategory, query);
   };
+
+  // Handle quantity change
   const handleQuantityChange = (productId, quantity) => {
     setQuantities((prevQuantities) => ({
       ...prevQuantities,
@@ -71,7 +75,8 @@ const ProductList = ({ setCart }) => {
   const handleSearchClick = () => {
     filterProducts(selectedCategory, searchQuery);
   };
-  // Handle adding to car
+
+  // Handle adding to cart
   const handleAddToCart = (product) => {
     const token = authToken || localStorage.getItem("access_token");
     if (!token) {
@@ -111,9 +116,54 @@ const ProductList = ({ setCart }) => {
       .catch((error) => console.error("Error creating order:", error));
   };
 
+  // Sort products based on selected sort option
+  const handleSortChange = (option) => {
+    setSortOption(option);
+    switch (option) {
+      case "price-desc":
+        sortProductsByPrice("desc");
+        break;
+      case "price-asc":
+        sortProductsByPrice("asc");
+        break;
+      case "name-asc":
+        sortProductsByName("asc");
+        break;
+      case "name-desc":
+        sortProductsByName("desc");
+        break;
+      default:
+        break;
+    }
+  };
+
+  // Sort products by price
+  const sortProductsByPrice = (order) => {
+    const sortedProducts = [...filteredProducts].sort((a, b) => {
+      if (order === "asc") {
+        return a.price - b.price;
+      } else {
+        return b.price - a.price;
+      }
+    });
+    setFilteredProducts(sortedProducts);
+  };
+
+  // Sort products by name
+  const sortProductsByName = (order) => {
+    const sortedProducts = [...filteredProducts].sort((a, b) => {
+      if (order === "asc") {
+        return a.title.localeCompare(b.title);
+      } else {
+        return b.title.localeCompare(a.title);
+      }
+    });
+    setFilteredProducts(sortedProducts);
+  };
+
   return (
     <div className="w-full mx-auto p-4">
-      <div className="flex mb-4 space-x-4">
+      <div className="flex justify-between item-center mb-4 space-x-4">
         {/* Category filter dropdown */}
         <select
           className="px-4 py-2 border border-gray-300 rounded-md capitalize"
@@ -128,6 +178,7 @@ const ProductList = ({ setCart }) => {
           ))}
         </select>
         {/* Search bar */}
+        <div>
         <input
           type="text"
           className="px-4 py-2 border border-gray-300 rounded-md"
@@ -137,12 +188,27 @@ const ProductList = ({ setCart }) => {
         />
         {/* Search button */}
         <button
-          className="bg-blue-300 hover:bg-blue-200/90 p-2 py-2 rounded border"
+          className="bg-blue-300 hover:bg-blue-200/90 p-4 py-2 rounded border"
           onClick={handleSearchClick}
         >
           <GrSearch />
         </button>
+        </div>
+        {/* Sort dropdown */}
+        
+        <select
+          className="px-4 py-2 border border-gray-300 rounded-md"
+          value={sortOption}
+          onChange={(e) => handleSortChange(e.target.value)}
+        >
+          <option value="">Sort By</option>
+          <option value="price-desc">Price (Highest)</option>
+          <option value="price-asc">Price (Lowest)</option>
+          <option value="name-asc">Name (A-Z)</option>
+          <option value="name-desc">Name (Z-A)</option>
+        </select>
       </div>
+      <hr className="my-6 border-gray-300" />
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 w-full">
         {filteredProducts.map((product) => (
           <div
@@ -171,17 +237,19 @@ const ProductList = ({ setCart }) => {
               </div>
               <div className="flex justify-between items-center">
                 <button
-                className="bg-blue-300 hover:bg-blue-200 text-white text-md py-1 px-2 rounded-sm transition duration-300 ease-in-out"
-                onClick={() => handleAddToCart(product)}
+                  className="bg-blue-300 hover:bg-blue-200 text-white text-md py-1 px-2 rounded-sm transition duration-300 ease-in-out"
+                  onClick={() => handleAddToCart(product)}
                 >
-                Add to Cart
+                  Add to Cart
                 </button>
                 <input
-                className="border border-blue-200 rounded-md px-2 py-1 w-12 "
-                type="number"
-                min="1"
-                value={quantities[product.id] || 1}
-                onChange={(e) => handleQuantityChange(product.id, parseInt(e.target.value))}
+                  className="border border-blue-200 rounded-md px-2 py-1 w-12 "
+                  type="number"
+                  min="1"
+                  value={quantities[product.id] || 1}
+                  onChange={(e) =>
+                    handleQuantityChange(product.id, parseInt(e.target.value))
+                  }
                 />
               </div>
             </div>
