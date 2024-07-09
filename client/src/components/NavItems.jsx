@@ -9,8 +9,9 @@ import CartModal from "./cartModal";
 const NavItems = () => {
   const { currentUser, logout } = useContext(UserContext);
   const { cart } = useContext(CartContext);
-  const [showModal, setShowModal] = useState(null);
+  const [showModal, setShowModal] = useState(false);
   const [showPopover, setShowPopover] = useState(false);
+  const [cartCount, setCartCount] = useState(cart.length);
   const timeoutRef = useRef(null);
 
   const toggleModal = () => {
@@ -23,12 +24,16 @@ const NavItems = () => {
   };
 
   const handleMouseLeave = () => {
-    timeoutRef.current = setTimeout(() => setShowPopover(false), 200); // Small delay before hiding the popover
+    timeoutRef.current = setTimeout(() => setShowPopover(false), 200);
   };
 
   useEffect(() => {
-    return () => clearTimeout(timeoutRef.current); // Cleanup timeout on unmount
+    return () => clearTimeout(timeoutRef.current);
   }, []);
+
+  useEffect(() => {
+    setCartCount(cart.length);
+  }, [cart]);
 
   return (
     <div className="container mx-auto flex justify-between items-center">
@@ -78,9 +83,8 @@ const NavItems = () => {
                   onMouseLeave={handleMouseLeave}
                 >
                   <div className="px-4 py-2 text-gray-700 border-b">
-                    Welome, {currentUser.name}
+                    Welcome, {currentUser.name}
                   </div>
-                  {/* <Link to="/cart" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">Orders</Link> */}
                   <button
                     onClick={toggleModal}
                     className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
@@ -116,9 +120,9 @@ const NavItems = () => {
                 size={23}
                 className="w-7 h-7 fill-blue-500 hover:fill-blue-300"
               />
-              {cart.length > 0 && (
+              {cartCount > 0 && (
                 <span className="absolute -top-1 -right-1 bg-red-500 rounded-full text-white text-xs px-2">
-                  {cart.length}
+                  {cartCount}
                 </span>
               )}
             </button>
