@@ -4,18 +4,25 @@ import { UserContext } from "./context/userContext";
 
 const CartModal = ({ isOpen, toggleModal }) => {
   const { cart, removeFromCart } = useContext(CartContext);
-  const { authToken } = useContext(UserContext);
+  const { currentUser, authToken } = useContext(UserContext);
+  console.log(currentUser);
 
   const handleClose = () => {
     toggleModal();
   };
-  useEffect(() => {
 
+  useEffect(() => {
     const fetchOrders = async () => {
+      const token = authToken || localStorage.getItem("access_token");
+      if (!token) {
+        console.error("No auth token available");
+        return;
+      }
+
       try {
         const response = await fetch("http://127.0.0.1:5000/orders", {
           headers: {
-            Authorization: `Bearer ${authToken}`,
+            Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
         });
@@ -33,14 +40,20 @@ const CartModal = ({ isOpen, toggleModal }) => {
       fetchOrders();
     }
   }, [isOpen, authToken]);
+
   const handleDelete = async (order_id) => {
+    const token = authToken || localStorage.getItem("access_token");
+    if (!token) {
+      console.error("No auth token available");
+      return;
+    }
+
     try {
       console.log("Deleting order with ID:", order_id);
       const response = await fetch(`http://127.0.0.1:5000/orders/${order_id}`, {
         method: "DELETE",
         headers: {
-          Authorization: `Bearer ${authToken}`,
-
+          Authorization: `Bearer ${token}`,
         },
       });
 
@@ -49,7 +62,6 @@ const CartModal = ({ isOpen, toggleModal }) => {
         throw new Error(`Failed to delete order: ${errorMessage}`);
       }
 
-
       removeFromCart(order_id);
     } catch (error) {
       console.error("Error deleting order:", error);
@@ -57,6 +69,7 @@ const CartModal = ({ isOpen, toggleModal }) => {
   };
 
   console.log(cart);
+
   return (
     <>
       {isOpen && (
@@ -92,7 +105,7 @@ const CartModal = ({ isOpen, toggleModal }) => {
                 <div>
                   {cart.map((order) => (
                     <div
-                      key={order.product_id}
+                      key={order.id}
                       className="flex justify-between items-center py-4"
                     >
                       <div className="flex items-center">

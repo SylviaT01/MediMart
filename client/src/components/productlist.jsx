@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import { GrSearch } from "react-icons/gr";
-import { CartContext } from './context/cartContext';
-
+import { CartContext } from "./context/cartContext";
+import { UserContext } from "./context/userContext";
 
 const ProductList = ({ setCart }) => {
   const [products, setProducts] = useState([]);
@@ -10,7 +10,8 @@ const ProductList = ({ setCart }) => {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const { addToCart } = useContext(CartContext);
-  
+  const { currentUser, authToken } = useContext(UserContext);
+  console.log(currentUser);
 
   // Fetch products from API
   useEffect(() => {
@@ -66,9 +67,15 @@ const ProductList = ({ setCart }) => {
 
   // Handle adding to cart
   const handleAddToCart = (product) => {
-    // Create a new order (Assuming user_id is 1 for simplicity)
+    const token = authToken || localStorage.getItem("access_token");
+    if (!token) {
+      console.error("No auth token available");
+      return;
+    }
+
+    // Create a new order
     const order = {
-      user_id: 1,
+      user_id: currentUser.id,
       product_id: product.id,
       quantity: 1,
       price: product.price,
@@ -79,10 +86,16 @@ const ProductList = ({ setCart }) => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(order),
     })
-      .then((response) => response.json())
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Failed to create order: ${response.statusText}`);
+        }
+        return response.json();
+      })
       .then((data) => {
         console.log("Order created:", data);
         // Update cart state
@@ -146,7 +159,9 @@ const ProductList = ({ setCart }) => {
               <div className="text-sm text-gray-500 capitalize">
                 {product.category_name}
               </div>
-              <div className="text-lg font-semibold">Ksh {product.price}</div>
+              <div className="text-lg font-semibold">
+                Ksh {product.price.toLocaleString()}
+              </div>
               <button
                 className="bg-blue-300 hover:bg-blue-200 text-white py-1 px-2 rounded-md transition duration-300 ease-in-out"
                 onClick={() => handleAddToCart(product)}

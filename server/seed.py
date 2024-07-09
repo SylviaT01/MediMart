@@ -33,32 +33,6 @@ api_url = "https://api.github.com/repos/ahabab23/chemistdata/contents/payless"
 
 logging.basicConfig(level=logging.DEBUG)  # Enable debug logging
 
-# def fetch_json_files_list(url):
-#     try:
-#         headers = {"Accept": "application/vnd.github.v3+json"}
-#         response = requests.get(url, headers=headers)
-#         response.raise_for_status()
-#         files = response.json()
-#         json_files = [file['download_url'] for file in files if file.get('name', '').endswith('.json')]
-#         return json_files
-#     except requests.exceptions.RequestException as e:
-#         logging.error(f"Error fetching JSON files from {url}: {e}")
-#         return []
-
-# def fetch_products_from_github(urls):
-#     products = []
-#     for url in urls:
-#         try:
-#             response = requests.get(url)
-#             response.raise_for_status()
-#             data = response.json()
-#             for item in data:
-#                 item['filename'] = os.path.basename(url)  # Add filename as category
-#             products.extend(data)
-#         except requests.exceptions.RequestException as e:
-#             logging.error(f"Error fetching product data from {url}: {e}")
-#     return products
-
 def generate_fake_users(num_users):
     users = []
     for _ in range(num_users):
@@ -68,19 +42,6 @@ def generate_fake_users(num_users):
         user = User(name=name, email=email, password=password)
         users.append(user)
     return users
-
-# def generate_products_from_json(data):
-#     products = []
-#     for category_name, items in data.items():
-#         for item in items:
-#             product = Product(
-#                 title=item['title'],
-#                 image_url=item['image_url'],
-#                 price=item['price'],
-#                 category=Category.query.filter_by(name=category_name).first()
-#             )
-#             products.append(product)
-#     return products
 
 def generate_fake_orders(num_orders, users, products):
     orders = []
@@ -133,7 +94,7 @@ with app.app_context():
                 title=item["title"],
                 price=item["price"],
                 image_url=item["image_url"],
-                category_name=category.name,
+                category_name=category_name,  # Ensure category_name is set correctly
                 category_id=category.id
             )
             products.append(product)

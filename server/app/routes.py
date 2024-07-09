@@ -161,7 +161,6 @@ def create_order():
     try:
         data = request.get_json()
         user_id = get_jwt_identity()
-        session_token = get_jwt()["jti"] 
 
         if not data or not all(key in data for key in ('product_id', 'quantity', 'total_price')):
             return jsonify({"error": "Invalid data"}), 400
@@ -173,7 +172,6 @@ def create_order():
             price=data.get('price'), 
             total_price=data['total_price'],
             order_date=datetime.utcnow(),
-            session_token=session_token 
         )
         db.session.add(new_order)
         db.session.commit()
@@ -189,7 +187,6 @@ def create_order():
 @jwt_required()
 def get_orders():
     current_user_id = get_jwt_identity()
-
     orders = Order.query.filter_by(user_id=current_user_id).all()
     return jsonify([order.as_dict() for order in orders]), 200
 
