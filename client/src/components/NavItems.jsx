@@ -9,12 +9,12 @@ import CartModal from "./cartModal";
 const NavItems = () => {
   const { currentUser, logout } = useContext(UserContext);
   const { cart } = useContext(CartContext);
-  const [showModal, setShowModal] = useState(false);
+  const [showModal, setShowModal] = useState(null);
   const [showPopover, setShowPopover] = useState(false);
   const timeoutRef = useRef(null);
 
   const toggleModal = () => {
-    setShowModal(!showModal);
+    setShowModal((showModal) => !showModal);
   };
 
   const handleMouseEnter = () => {

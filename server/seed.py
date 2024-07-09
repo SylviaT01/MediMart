@@ -26,8 +26,8 @@ for category, products in data.items():
         product['price'] = convert_price_to_float(product['price'])
 
 # Specify the number of users and orders to generate
-NUM_USERS = 20
-NUM_ORDERS = 40
+NUM_USERS = 0
+NUM_ORDERS = 0
 
 api_url = "https://api.github.com/repos/ahabab23/chemistdata/contents/payless"
 
