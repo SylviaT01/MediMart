@@ -1,11 +1,11 @@
-import React, { useEffect, useContext } from "react";
+import React, { useEffect, useContext, useState } from "react";
 import { CartContext } from "./context/cartContext";
 import { UserContext } from "./context/userContext";
 
 const CartModal = ({ isOpen, toggleModal }) => {
   const { cart, removeFromCart } = useContext(CartContext);
   const { currentUser, authToken } = useContext(UserContext);
-  console.log(currentUser);
+  const [orders, setOrders] = useState([]);
 
   const handleClose = () => {
     toggleModal();
@@ -20,28 +20,32 @@ const CartModal = ({ isOpen, toggleModal }) => {
       }
 
       try {
-        const response = await fetch("http://127.0.0.1:5000/orders", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        });
+        const response = await fetch(
+          `http://127.0.0.1:5000/orders?user_id=${currentUser.id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
         if (!response.ok) {
           throw new Error("Failed to fetch orders");
         }
         const data = await response.json();
+        setOrders(data); // Set fetched orders to state
         console.log("Fetched orders:", data);
       } catch (error) {
         console.error("Error fetching orders:", error);
       }
     };
 
-    if (isOpen && authToken) {
+    if (isOpen && authToken && currentUser) {
       fetchOrders();
     }
-  }, [isOpen, authToken]);
+  }, [isOpen, authToken, currentUser]);
 
-  const handleDelete = async (order_id) => {
+  const handleDelete = async (orderId) => {
     const token = authToken || localStorage.getItem("access_token");
     if (!token) {
       console.error("No auth token available");
@@ -49,8 +53,8 @@ const CartModal = ({ isOpen, toggleModal }) => {
     }
 
     try {
-      console.log("Deleting order with ID:", order_id);
-      const response = await fetch(`http://127.0.0.1:5000/orders/${order_id}`, {
+      console.log("Deleting order with ID:", orderId);
+      const response = await fetch(`http://127.0.0.1:5000/orders/${orderId}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -62,19 +66,23 @@ const CartModal = ({ isOpen, toggleModal }) => {
         throw new Error(`Failed to delete order: ${errorMessage}`);
       }
 
-      removeFromCart(order_id);
+      // Update local orders state (remove the deleted order)
+      setOrders(orders.filter((order) => order.id !== orderId));
+
+      // Update cart state (remove the corresponding item)
+      const deletedOrder = orders.find((order) => order.id === orderId);
+      if (deletedOrder) {
+        removeFromCart(deletedOrder.product_id);
+      }
     } catch (error) {
       console.error("Error deleting order:", error);
     }
   };
 
-  console.log(cart);
-
   return (
     <>
       {isOpen && (
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-gray-900 bg-opacity-50">
-          {/* Modal content */}
           <div className="bg-white rounded-lg w-[500px] max-h-[80vh] overflow-y-auto">
             <div className="p-6">
               <div className="flex justify-between items-center border-b border-gray-200 pb-4">
@@ -83,43 +91,30 @@ const CartModal = ({ isOpen, toggleModal }) => {
                   className="text-gray-500 hover:text-gray-600 focus:outline-none"
                   onClick={handleClose}
                 >
-                  <svg
-                    className="w-6 h-6 cursor-pointer"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M6 18L18 6M6 6l12 12"
-                    ></path>
-                  </svg>
+                  Close
                 </button>
               </div>
-              {cart.length === 0 ? (
+              {orders.length === 0 ? (
                 <p className="text-center mt-4">Your cart is empty.</p>
               ) : (
                 <div>
-                  {cart.map((order) => (
+                  {orders.map((order) => (
                     <div
                       key={order.id}
                       className="flex justify-between items-center py-4"
                     >
                       <div className="flex items-center">
                         <img
-                          src={order.image_url}
+                          src={order.product.image_url}
                           alt="Product"
                           className="w-16 h-16 object-cover mr-4"
                         />
                         <div>
                           <h4 className="text-lg font-medium">
-                            Name: {order.title}
+                            Name: {order.product.title}
                           </h4>
                           <p className="text-sm text-gray-600">
-                            Price: {order.price}
+                            Price: {order.product.price}
                           </p>
                         </div>
                       </div>
@@ -140,7 +135,7 @@ const CartModal = ({ isOpen, toggleModal }) => {
                     <h4 className="text-lg font-medium">Total:</h4>
                     <p className="text-lg font-medium">
                       Ksh{" "}
-                      {cart.reduce(
+                      {orders.reduce(
                         (total, order) => total + order.total_price,
                         0
                       )}

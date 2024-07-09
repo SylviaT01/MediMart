@@ -188,9 +188,7 @@ def create_order():
 def get_orders():
     current_user_id = get_jwt_identity()
     orders = Order.query.filter_by(user_id=current_user_id).all()
-    return jsonify([order.as_dict() for order in orders]), 200
-
-
+    return jsonify([order.serialize() for order in orders]), 200
 
 # Delete order
 @routes.route('/orders/<int:order_id>', methods=['DELETE'])

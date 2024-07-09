@@ -48,6 +48,21 @@ class Order(db.Model):
     product_id = db.Column(db.Integer, db.ForeignKey('products.id'))
     user = db.relationship('User', back_populates='orders')
     product = db.relationship('Product', back_populates='orders')
+    def serialize(self):
+        return {
+            'id': self.id,
+            'quantity': self.quantity,
+            'price': self.price,
+            'total_price': self.total_price,
+            'order_date': self.order_date.isoformat(),
+            'user_id': self.user_id,
+            'product': {
+                'id': self.product.id,
+                'title': self.product.title,
+                'image_url': self.product.image_url,
+                'price': self.product.price
+            }
+        }
     
     def as_dict(self):
         return {col.name: getattr(self, col.name) for col in self.__table__.columns}
