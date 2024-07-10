@@ -111,14 +111,16 @@ const CartModal = ({ isOpen, toggleModal }) => {
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-gray-900 bg-opacity-50">
           <div className="bg-white rounded-lg w-[800px] max-h-[80vh] overflow-y-auto">
             <div className="p-6">
-              <div className="flex justify-between items-center border-b border-gray-200 pb-4">
-                <h3 className="text-xl font-semibold">Shopping Cart</h3>
-                <button
-                  className="text-gray-500 hover:text-gray-600 focus:outline-none"
-                  onClick={toggleModal}
-                >
-                  Close
-                </button>
+              <div className="sticky top-0 bg-white pb-5 pt-4">
+                <div className="flex justify-between items-center border-b border-t border-gray-200 pb-4 pt-4">
+                  <h3 className="text-xl font-semibold">Shopping Cart</h3>
+                  <button
+                    className="text-gray-500 hover:text-gray-600 focus:outline-none"
+                    onClick={toggleModal}
+                  >
+                    Close
+                  </button>
+                </div>
               </div>
               {orders.length === 0 ? (
                 <p className="text-center mt-4">Your cart is empty.</p>
