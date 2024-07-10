@@ -7,7 +7,7 @@ import requests
 from faker import Faker
 from datetime import datetime, timedelta
 from app import db, create_app, bcrypt
-from app.models import User, Product, Order, Category
+from app.models import User, Product, Order, Category,Address
 
 fake = Faker()
 
@@ -65,6 +65,7 @@ def generate_fake_orders(num_orders, users, products):
 
 def clear_tables():
     Order.query.delete()
+    Address.query.delete()
     Product.query.delete()
     User.query.delete()
     Category.query.delete()

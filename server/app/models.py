@@ -8,6 +8,7 @@ class User(db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(120), nullable=False)
     orders = db.relationship('Order', back_populates='user', cascade='all, delete-orphan')
+    addresses = db.relationship('Address', back_populates='user')
     products = association_proxy('orders', 'product', creator=lambda product_obj: Order(product=product_obj))
     
     def as_dict(self):
@@ -63,6 +64,19 @@ class Order(db.Model):
                 'price': self.product.price
             }
         }
+    def as_dict(self):
+        return {col.name: getattr(self, col.name) for col in self.__table__.columns}
     
+
+class Address(db.Model):
+    __tablename__ = 'addresses'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(120), nullable=False)
+    phone_number = db.Column(db.Integer, nullable=False)
+    city = db.Column(db.String(120), nullable=False)
+    location = db.Column(db.String(120), nullable=False)
+    apartment= db.Column(db.String(120), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    user = db.relationship('User', back_populates='addresses') 
     def as_dict(self):
         return {col.name: getattr(self, col.name) for col in self.__table__.columns}
