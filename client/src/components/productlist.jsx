@@ -1,6 +1,5 @@
 
 import React, { useEffect, useState, useContext } from "react";
-import { GrSearch } from "react-icons/gr";
 import { CartContext } from "./context/cartContext";
 import { UserContext } from "./context/userContext";
 
@@ -71,10 +70,7 @@ const ProductList = ({ setCart }) => {
     setFilteredProducts(filtered);
   };
 
-  // Handle search button click
-  const handleSearchClick = () => {
-    filterProducts(selectedCategory, searchQuery);
-  };
+  
 
   // Handle adding to cart
   const handleAddToCart = (product) => {
@@ -162,7 +158,7 @@ const ProductList = ({ setCart }) => {
   };
 
   return (
-    <div className="w-full mx-auto p-4">
+    <div className="w-full mx-auto px-8 p-4 bg-gray-100">
       <div className="flex justify-between item-center mb-4 space-x-4">
         {/* Category filter dropdown */}
         <select
@@ -186,13 +182,6 @@ const ProductList = ({ setCart }) => {
           value={searchQuery}
           onChange={(e) => handleSearchChange(e.target.value)}
         />
-        {/* Search button */}
-        <button
-          className="bg-blue-300 hover:bg-blue-200/90 p-4 py-2 rounded border"
-          onClick={handleSearchClick}
-        >
-          <GrSearch />
-        </button>
         </div>
         {/* Sort dropdown */}
         
@@ -208,12 +197,13 @@ const ProductList = ({ setCart }) => {
           <option value="name-desc">Name (Z-A)</option>
         </select>
       </div>
-      <hr className="my-6 border-gray-300" />
+      <hr className="my-6 border-gray-200" />
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 w-full">
         {filteredProducts.map((product) => (
           <div
             key={product.id}
             className="border p-4 flex flex-col justify-between shadow-xl rounded-lg overflow-hidden bg-white"
+            data-aos="fade-up"
           >
             <h2 className="font-medium text-lg mb-2 overflow-hidden relative">
               <span className="marquee">{product.title}</span>

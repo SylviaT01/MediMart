@@ -48,7 +48,7 @@ const AboutUs = () => {
   return (
 
 
-    <div className="bg-slate-200 ">
+    <div className="bg-gray-100 ">
       <div className="header">
         <Parallax
           className="w-full h-[calc(100vh-5rem)] object-cover brightness-[.6]"
@@ -74,7 +74,7 @@ const AboutUs = () => {
 					</p>
 				</article>
 			</section>
-      <section className='bg-slate-200 py-20 pt-8 '>
+      <section className='bg-gray-100 py-20 pt-8 '>
       <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-16 md:gap-6 mt-8   md:px-32'>
 				{services.map((service) => (
 					<div key={service.id} className='bg-slate-100 hover:scale-105 duration-300 ease-linear shadow-lg py-6 px-8 flex justify-center flex-col text-center items-center gap-4 mx-8  md:mx-0 rounded-lg'>

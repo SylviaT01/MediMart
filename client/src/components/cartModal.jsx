@@ -6,6 +6,8 @@ const CartModal = ({ isOpen, toggleModal }) => {
   const { cart, removeFromCart, setCart } = useContext(CartContext);
   const { currentUser, authToken } = useContext(UserContext);
   const [orders, setOrders] = useState([]);
+  const [totalPrice, setTotalPrice] = useState(0);
+
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -31,6 +33,7 @@ const CartModal = ({ isOpen, toggleModal }) => {
         const data = await response.json();
         setCart(data);
         setOrders(data);
+        calculateTotalPrice(data);
         console.log("Fetched orders:", data);
       } catch (error) {
         console.error("Error fetching orders:", error);
@@ -66,6 +69,7 @@ const CartModal = ({ isOpen, toggleModal }) => {
         const data = await response.json();
         setCart(data);
         setOrders(data);
+        calculateTotalPrice(data);
         console.log("Fetched orders:", data);
       } catch (error) {
         console.error("Error fetching orders:", error);
@@ -99,17 +103,26 @@ const CartModal = ({ isOpen, toggleModal }) => {
       }
 
       removeFromCart(order_id);
-      setOrders(orders.filter((order) => order.id !== order_id));
+      const updatedOrders=orders.filter((order) => order.id !== order_id)
+      setOrders(updatedOrders);
+      calculateTotalPrice(updatedOrders);
     } catch (error) {
       console.error("Error deleting order:", error);
     }
+  };
+  const calculateTotalPrice = (orders) => {
+    const total = orders.reduce(
+      (sum, order) => sum + order.product.price * order.quantity,
+      0
+    );
+    setTotalPrice(total);
   };
 
   return (
     <>
       {isOpen && (
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-gray-900 bg-opacity-50">
-          <div className="bg-white rounded-lg w-[800px] max-h-[80vh] overflow-y-auto">
+          <div className="bg-white rounded-lg w-[1000px] max-h-[80vh] overflow-y-auto">
             <div className="p-6">
               <div className="flex justify-between items-center border-b border-gray-200 pb-4">
                 <h3 className="text-xl font-semibold">Shopping Cart</h3>
@@ -124,57 +137,94 @@ const CartModal = ({ isOpen, toggleModal }) => {
                 <p className="text-center mt-4">Your cart is empty.</p>
               ) : (
                 <div>
-                  {orders.map((order) => (
-                    <div
-                      key={order.id}
-                      className="flex justify-between items-center px-4 py-4"
-                    >
-                      <div className="flex items-center ">
-                        <img
-                          src={order.product.image_url}
-                          alt="Product"
-                          className="w-16 h-16 object-cover mr-4"
-                        />
-                        <div>
-                          <h4 className="text-sm font-medium">
-                            {order.product.title}
-                          </h4>
-                          <p className="text-sm text-gray-600">
-                            Price: {order.product.price.toLocaleString()}
-                          </p>
-                        </div>
-                      </div>
-                      <div>
-                        <p className="text-lg font-medium">
-                          Ksh {order.price.toLocaleString()} * {order.quantity}
-                        </p>
-                      </div>
-                      <button
-                        className="text-red-600 hover:text-red-800"
-                        onClick={() => handleDelete(order.id)}
-                      >
-                        Delete
-                      </button>
-                    </div>
-                  ))}
+                  <table className="min-w-full divide-y divide-gray-200">
+                    <thead className="bg-gray-50">
+                      <tr>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Item
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Price
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Subtotal
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Actions
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody className="bg-white divide-y divide-gray-200">
+                      {orders.map((order) => (
+                        <tr key={order.id}>
+                          <td className="px-6 py-4 whitespace-nowrap flex items-center">
+                            <img
+                              src={order.product.image_url}
+                              alt="Product"
+                              className="w-16 h-16 object-cover mr-4"
+                            />
+                            <div>
+                              <h4 className="text-sm font-medium">
+                                {order.product.title}
+                              </h4>
+                            </div>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            {order.product.price.toLocaleString()}
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            {(
+                              order.product.price * order.quantity
+                            ).toLocaleString()}
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <button
+                              className="text-red-600 hover:text-red-800"
+                              onClick={() => handleDelete(order.id)}
+                            >
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                                className="w-6 h-6"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M6 18L18 6M6 6l12 12"
+                                />
+                              </svg>
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
                   <div className="flex justify-between items-center border-t border-gray-200 pt-4">
-                    <h4 className="text-lg font-medium">Total:</h4>
-                    <p className="text-lg font-medium">
-                      Ksh{" "}
-                      {orders.reduce(
-                        (total, order) => total + order.total_price,
-                        0
-                      )}
+                    <h4 className="text-sm font-medium">Total Price:</h4>
+                    <p className="text-sm font-medium">
+                      Ksh{" "}                       
+                      {totalPrice.toLocaleString()}
                     </p>
                   </div>
-                  <button
-                    className="bg-blue-300 hover:bg-blue-200 text-white py-2 px-4 rounded-md mt-4 w-full"
-                    onClick={() => {
-                      /* Handle checkout */
-                    }}
-                  >
-                    Checkout
-                  </button>
+
+                  <div className="flex justify-between items-center border-t border-gray-200 pt-4 mt-4">
+                    <button
+                      className="bg-gray-300 hover:bg-gray-500 text-white py-2 px-4 rounded"
+                      onClick={toggleModal}
+                    >
+                      Continue Shopping
+                    </button>
+                    <button
+                      className="bg-black hover:bg-gray-800 text-white py-2 px-4 rounded"
+                      onClick={() => {
+                      }}
+                    >
+                      Checkout
+                    </button>
+                  </div>
                 </div>
               )}
             </div>
