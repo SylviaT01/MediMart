@@ -162,7 +162,7 @@ const ProductList = ({ setCart }) => {
   };
 
   return (
-    <div className="w-full mx-auto p-4">
+    <div className="w-full mx-auto p-4 mt-20">
       <div className="flex justify-between item-center mb-4 space-x-4">
         {/* Category filter dropdown */}
         <select
@@ -178,7 +178,7 @@ const ProductList = ({ setCart }) => {
           ))}
         </select>
         {/* Search bar */}
-        <div>
+        <div className="flex space-x-4">
         <input
           type="text"
           className="px-4 py-2 border border-gray-300 rounded-md"
