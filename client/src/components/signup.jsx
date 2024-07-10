@@ -1,65 +1,29 @@
-// import React, { useState } from "react";
 
-// function SignUp({ setUser }) {
-//   const [name, setName] = useState("");
-//   const [email, setEmail] = useState("");
-//   const [password, setPassword] = useState("");
-//   const [passwordConfirmation, setPasswordConfirmation] = useState("");
+import React, { useContext, useState } from 'react';
+import { UserContext } from './context/userContext';
+import { Link } from 'react-router-dom';
 
-//   function handleSubmit(e) {
-//     e.preventDefault();
-//     fetch("http://127.0.0.1:5000/users", {
-//       method: "POST",
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-//       body: JSON.stringify({
-//         name,
-//         email,
-//         password,
-//         password_confirmation: passwordConfirmation,
-//       }),
-//     }).then((r) => {
-//       if (r.ok) {
-//         r.json().then((user) => setUser(user));
-//       }
-//     });
-//   }
+export default function SignUp() {
+  const { signup } = useContext(UserContext);
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [passwordConfirmation, setPasswordConfirmation] = useState('');
 
-import React, { useContext, useState } from 'react'
-// import { Link } from 'react-router-dom'
-import { UserContext } from './context/userContext'
-
-
-function SignUp() 
-{
-
-  const {signup} = useContext(UserContext)
-
-
-
-  const [email, setEmail] = useState()
-  const [password, setPassword] = useState()
-  const [passwordConfirmation, setPasswordConfirmation] = useState()
-  const [name, setName] = useState()
-
-  console.log(email, password, passwordConfirmation, name);
-  
-  function handleSubmit(e){
-    e.preventDefault()
-
-    signup(name, email, password)
+  function handleSubmit(e) {
+    e.preventDefault();
+    signup(name, email, password);
   }
 
-
-
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full bg-white shadow-md rounded p-8">
-        <h2 className="text-2xl font-semibold mb-4 text-center">Sign Up</h2>
+        <h2 className="text-3xl font-semibold mb-4 text-center">Create an account</h2>
         <form className="space-y-4" onSubmit={handleSubmit}>
           <div>
-            <label htmlFor="username" className="block text-gray-700 text-sm font-bold mb-1">Username</label>
+            <label htmlFor="username" className="block text-sm font-medium text-gray-700">
+              Username
+            </label>
             <input
               id="username"
               name="username"
@@ -68,12 +32,14 @@ function SignUp()
               required
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+              className="input-field"
               placeholder="Username"
             />
           </div>
           <div>
-            <label htmlFor="email" className="block text-gray-700 text-sm font-bold mb-1">Email</label>
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+              Email address
+            </label>
             <input
               id="email"
               name="email"
@@ -82,12 +48,14 @@ function SignUp()
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+              className="input-field"
               placeholder="Email address"
             />
           </div>
           <div>
-            <label htmlFor="password" className="block text-gray-700 text-sm font-bold mb-1">Password</label>
+            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+              Password
+            </label>
             <input
               id="password"
               name="password"
@@ -96,12 +64,14 @@ function SignUp()
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+              className="input-field"
               placeholder="Password"
             />
           </div>
           <div>
-            <label htmlFor="passwordConfirmation" className="block text-gray-700 text-sm font-bold mb-1">Confirm password</label>
+            <label htmlFor="passwordConfirmation" className="block text-sm font-medium text-gray-700">
+              Confirm password
+            </label>
             <input
               id="passwordConfirmation"
               name="passwordConfirmation"
@@ -110,17 +80,26 @@ function SignUp()
               required
               value={passwordConfirmation}
               onChange={(e) => setPasswordConfirmation(e.target.value)}
-              className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+              className="input-field"
               placeholder="Confirm Password"
             />
           </div>
           <div>
-            <button type="submit" className="bg-blue-300 text-white py-2 px-4 rounded hover:bg-blue-500 w-full">Sign Up</button>
+            <button
+              type="submit"
+              className="btn-primary w-full py-2 px-4 mt-4 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded"
+            >
+              Sign up
+            </button>
+          </div>
+          <div className="text-center mt-4">
+            <span className="text-sm text-gray-600">Already have an account?</span>{' '}
+            <Link to="/login" className="text-sm font-medium text-indigo-600 hover:text-indigo-500">
+              Sign in
+            </Link>
           </div>
         </form>
       </div>
     </div>
   );
 }
-
-export default SignUp;

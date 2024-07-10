@@ -1,12 +1,14 @@
 import React, { useContext, useState, useEffect } from "react";
 import { CartContext } from "./context/cartContext";
 import { UserContext } from "./context/userContext";
+import { useNavigate } from "react-router-dom";
 
 const CartModal = ({ isOpen, toggleModal }) => {
   const { cart, removeFromCart, setCart } = useContext(CartContext);
   const { currentUser, authToken } = useContext(UserContext);
   const [orders, setOrders] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
+  const navigate = useNavigate();
 
 
   useEffect(() => {
@@ -117,6 +119,10 @@ const CartModal = ({ isOpen, toggleModal }) => {
     );
     setTotalPrice(total);
   };
+  const handleCheckout = () => {
+    toggleModal(); // Close the cart modal
+    navigate("/shipping"); // Navigate to the shipping form
+  };
 
   return (
     <>
@@ -221,8 +227,7 @@ const CartModal = ({ isOpen, toggleModal }) => {
                     </button>
                     <button
                       className="bg-black hover:bg-gray-800 text-white py-2 px-4 rounded"
-                      onClick={() => {
-                      }}
+                      onClick={handleCheckout}
                     >
                       Checkout
                     </button>

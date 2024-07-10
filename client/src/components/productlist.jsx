@@ -3,6 +3,7 @@ import React, { useEffect, useState, useContext } from "react";
 import { CartContext } from "./context/cartContext";
 import { UserContext } from "./context/userContext";
 
+
 const ProductList = ({ setCart }) => {
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
@@ -14,6 +15,10 @@ const ProductList = ({ setCart }) => {
   const { addToCart } = useContext(CartContext);
   const { currentUser, authToken } = useContext(UserContext);
   const [quantities, setQuantities] = useState([]);
+  const [alertMessage, setAlertMessage] = useState('');
+
+
+  
 
   // Fetch products from API
   useEffect(() => {
@@ -79,6 +84,8 @@ const ProductList = ({ setCart }) => {
       console.error("No auth token available");
       return;
     }
+  
+
     const quantity = quantities[product.id] || 1;
 
     // Create a new order
@@ -108,6 +115,13 @@ const ProductList = ({ setCart }) => {
         console.log("Order created:", data);
         // Update cart state
         addToCart({ ...product, quantity });
+        // Set alert message
+        setAlertMessage('Product added to cart successfully!');
+
+        // Clear the alert message after 3 seconds
+        setTimeout(() => {
+          setAlertMessage('');
+        }, 3000);
       })
       .catch((error) => console.error("Error creating order:", error));
   };
@@ -159,7 +173,7 @@ const ProductList = ({ setCart }) => {
 
   return (
 
-    <div className="w-full mx-auto p-4 mt-20">
+    <div className="w-full mx-auto p-4 mt-15">
       <div className="flex justify-between item-center mb-4 space-x-4">
         {/* Category filter dropdown */}
         <select
@@ -204,7 +218,6 @@ const ProductList = ({ setCart }) => {
           <div
             key={product.id}
             className="border p-4 flex flex-col justify-between shadow-xl rounded-lg overflow-hidden bg-white"
-            data-aos="fade-up"
           >
             <h2 className="font-medium text-lg mb-2 overflow-hidden relative">
               <span className="marquee">{product.title}</span>
@@ -247,6 +260,14 @@ const ProductList = ({ setCart }) => {
           </div>
         ))}
       </div>
+      {/* Alert message */}
+      {alertMessage && (
+      <div className="fixed inset-x-0 bottom-0 flex items-center justify-center z-50">
+        <div className="bg-blue-500 text-white text-center py-2 px-4 rounded">
+        {alertMessage}
+      </div>
+  </div>
+)}
     </div>
   );
 };

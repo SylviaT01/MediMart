@@ -9,6 +9,7 @@ import Login from './components/login';
 import SignUp from './components/signup';
 import Contact from './components/Contact';
 import CartModal from './components/cartModal';
+import ShippingForm from "./components/ShippingForm";
 import { UserProvider, UserContext } from './components/context/userContext';
 import { CartProvider } from './components/context/cartContext';
 import AOS from 'aos';
@@ -39,6 +40,7 @@ function AppContent() {
           <Route path="/about" element={currentUser ? <AboutUs /> : <Navigate to="/home" />} />
           <Route path="/contact" element={currentUser ? <Contact /> : <Navigate to="/home" />} />
           <Route path="/cart" element={currentUser ? <CartModal /> : <Navigate to="/home" />} />
+          <Route path="/shipping" element={currentUser ? <ShippingForm /> : <Navigate to="/home" />} />
         </Routes>
       </div>
       <Footer />
