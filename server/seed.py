@@ -7,7 +7,7 @@ import requests
 from faker import Faker
 from datetime import datetime, timedelta
 from app import db, create_app, bcrypt
-from app.models import User, Product, Order, Category,Address
+from app.models import User, Product, Order, Category, Address, Contact
 
 fake = Faker()
 
@@ -28,6 +28,7 @@ for category, products in data.items():
 # Specify the number of users and orders to generate
 NUM_USERS = 0
 NUM_ORDERS = 0
+NUM_CONTACTS = 0
 
 api_url = "https://api.github.com/repos/ahabab23/chemistdata/contents/payless"
 
@@ -63,12 +64,24 @@ def generate_fake_orders(num_orders, users, products):
         orders.append(order)
     return orders
 
+def generate_fake_contacts(num_contacts, users):
+    contacts = []
+    for _ in range(num_contacts):
+        name = fake.name()
+        email = fake.email()
+        message = fake.text(max_nb_chars=200)
+        user = random.choice(users)
+        contact = Contact(name=name, email=email, message=message, user=user)
+        contacts.append(contact)
+    return contacts
+
 def clear_tables():
     Order.query.delete()
     Address.query.delete()
     Product.query.delete()
     User.query.delete()
     Category.query.delete()
+    Contact.query.delete()
     db.session.commit()
 
 app = create_app()
@@ -82,6 +95,11 @@ with app.app_context():
     # Generate and add fake users
     users = generate_fake_users(NUM_USERS)
     db.session.add_all(users)
+    db.session.commit()
+
+    # Generate and add fake contacts
+    contacts = generate_fake_contacts(NUM_CONTACTS, users)
+    db.session.add_all(contacts)
     db.session.commit()
 
     # Fetch and add products from JSON files in the folder

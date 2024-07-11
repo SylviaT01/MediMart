@@ -126,7 +126,7 @@ const Contact = () => {
             </Formik>
             {/* Success message */}
             {isSubmitted && (
-              <p className="text-green-600 mt-4">Successfully submitted ✅</p>
+              <p className="text-green-600 mt-4">Submitted successfully ✅</p>
             )}
           </div>
           {/* Contact Information */}
