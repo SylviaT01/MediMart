@@ -1,6 +1,5 @@
-import React from 'react';
-import NavItems from './NavItems';
-
+import React from "react";
+import NavItems from "./NavItems";
 
 const NavBar = () => {
   return (
@@ -13,4 +12,3 @@ const NavBar = () => {
 };
 
 export default NavBar;
-
