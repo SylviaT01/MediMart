@@ -18,7 +18,7 @@ jwt = JWTManager()
 
 def create_app():
     app = Flask(__name__)
-    app.config.from_object('app.config.Config')
+    app.config.from_object('server.app.config.Config')
     db.init_app(app)
     bcrypt.init_app(app)
     migrate.init_app(app, db)
