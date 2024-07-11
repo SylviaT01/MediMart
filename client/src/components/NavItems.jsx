@@ -133,13 +133,13 @@ const NavItems = () => {
         <>
           <Link
             to="/login"
-            className="bg-blue-400 hover:bg-blue-300/90 py-1 px-2 transition ease-in-out hover:-translate-y-1 hover:scale-110 duration-300"
+            className="bg-blue-300 hover:bg-blue-500 text-white py-1 px-2 transition ease-in-out hover:-translate-y-1 hover:scale-110 duration-300"
           >
             Login
           </Link>
           <Link
             to="/signup"
-            className="bg-blue-400 hover:bg-blue-300/90 py-1 px-2 transition ease-in-out hover:-translate-y-1 hover:scale-110 duration-300"
+            className="bg-blue-300 hover:bg-blue-500 text-white py-1 px-2 transition ease-in-out hover:-translate-y-1 hover:scale-110 duration-300"
           >
             Sign Up
           </Link>
