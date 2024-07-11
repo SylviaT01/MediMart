@@ -1,5 +1,5 @@
 from flask import request, jsonify, Blueprint
-from app import db
+from server.app import db
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity,  get_jwt, JWTManager, create_refresh_token 
 from app.models import User, Product, Order, Category, Address, Contact
 from flask_bcrypt import Bcrypt
