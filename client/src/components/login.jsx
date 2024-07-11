@@ -18,7 +18,7 @@ export default function Login() {
       <div className="w-full max-w-screen-lg bg-white rounded-lg overflow-hidden shadow-md">
         <div className="flex flex-col md:flex-row">
           {/* Left blue half */}
-          <div className="bg-blue-300 md:w-1/2 px-4 py-4 md:px-8 bg-cover bg-center " style={{ backgroundImage: `url('https://img.freepik.com/premium-photo/blurred-drugstore-background-defocus_841543-8518.jpg?w=360')` }}>
+          <div className="bg-blue-300 flex flex-col justify-center items-center md:w-1/2 px-4 py-4 md:px-8 bg-cover bg-center " style={{ backgroundImage: `url('https://img.freepik.com/premium-photo/blurred-drugstore-background-defocus_841543-8518.jpg?w=360')` }}>
             <h2 className="text-3xl font-semibold text-gray-700 text-center">Welcome to Medimart</h2>
             <p className="text-gray-700 mt-4 text-center">Your trusted online pharmacy.</p>
           </div>

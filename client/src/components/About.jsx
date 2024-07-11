@@ -6,6 +6,7 @@ import { FaCheckCircle } from 'react-icons/fa';
 import { RiHandHeartLine } from 'react-icons/ri';
 import { AiOutlineRocket } from 'react-icons/ai';
 import Pharmacist from './assets/Pharmacist.jpg';
+import Footer from './footer'
 
 const AboutUs = () => {
 
@@ -14,7 +15,7 @@ const AboutUs = () => {
       id: 1,
       icon: <GiCompass />,
       title: 'Mission',
-      text: 'At Medimart, we are dedicated to providing high-quality medications and healthcare essentials, delivered with reliability and care. We empower individuals and families to manage their health proactively, ensuring convenience and satisfaction every step of the way.',
+      text: 'At Medimart, we are dedicated to providing high-quality medications and healthcare essentials, delivered with reliability and care.',
     },
     {
       id: 2,
@@ -105,7 +106,9 @@ const AboutUs = () => {
         </div>
       </div>
     </div>
+    <Footer />
     </div>
+   
   );
 };
 

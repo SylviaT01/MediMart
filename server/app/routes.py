@@ -302,18 +302,18 @@ def submit_contact():
             return jsonify({"error": "Invalid data"}), 400
 
         new_message = Contact(
-            name=data['name'],
-            email=data['email'],
-            rating=data['rating'],
-            message=data['message'],
-            user_id=user_id
-        )
-
+             name = data['name'],
+            email = data['email'],
+            rating = data['rating'],
+            message = data['message'],
+            user_id = user_id  
+    )
         db.session.add(new_message)
         db.session.commit()
 
         return jsonify(new_message.as_dict()), 201
     except Exception as e:
-        print(f"Error submitting contact message: {e}")
-        return jsonify({"error": "An error occurred while submitting the message"}), 500
 
+        print(f"Error creating message: {e}")
+        return jsonify({"error": "An error occurred while creating the message"}), 500
+    
