@@ -40,3 +40,19 @@ MediMart online pharmacy enables users to browse, order, and manage medications 
 ```bash
 git clone git@github.com:SylviaT01/MediMart.git
 ```
+2. Install dependencies
+```bash
+npm install
+```
+```bash
+pipenv install
+```
+3. Start the Flask server
+```bash
+python run.py
+```
+4. Start the React development server
+```bash
+npm start
+```
+
