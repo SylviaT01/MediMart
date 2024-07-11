@@ -74,3 +74,6 @@ Contributions are welcome! If you'd like to contribute, please fork the reposito
 - [Lewis Wambugu](https://github.com/Wambuguu)
 - [Uwes Ahabab](https://github.com/ahabab23/ahabab23)
 
+## Copyright and License Information
+The project is licensed under [MIT License](LICENSE)
+
