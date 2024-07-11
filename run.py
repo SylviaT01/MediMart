@@ -5,7 +5,7 @@
 #     app.run(debug=True)
     
 
-from app import create_app
+from server.app import create_app
 import os
 
 app = create_app()
