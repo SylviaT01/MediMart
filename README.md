@@ -47,11 +47,15 @@ npm install
 ```bash
 pipenv install
 ```
-3. Start the Flask server
+3. Enter virtual environment(Backend)
+```bash
+pipenv shell
+```
+4. Start the Flask server
 ```bash
 python run.py
 ```
-4. Start the React development server
+5. Start the React development server
 ```bash
 npm start
 ```
