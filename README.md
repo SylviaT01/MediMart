@@ -35,3 +35,8 @@ MediMart online pharmacy enables users to browse, order, and manage medications 
 - [Font Awesome](https://fontawesome.com/)
 - [Git](https://www.git-scm.com/)
 
+## Get Started
+1. Clone the repository
+```bash
+git clone git@github.com:SylviaT01/MediMart.git
+```
