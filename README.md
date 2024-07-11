@@ -7,3 +7,11 @@ art is a comprehensive online pharmacy platform developed to provide users with 
 
 ## Minimum Viable Product(MVP)
 MediMart online pharmacy enables users to browse, order, and manage medications online.
+
+## Features
+- A visually engaging landing page.
+- User authentication and authorization
+- Medication catalog with search and filter functionality
+- Cart management with total cost calculation
+- Contact section for customer support
+- Service Review System
