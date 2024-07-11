@@ -1,9 +1,9 @@
-![Home Screenshot](/client/src/components/assets/frontpage.png)
+![Home Screenshot](/client/src/components/assets/frontpage.jpeg)
 
 # MediMart 
 
 ## Introduction
-art is a comprehensive online pharmacy platform developed to provide users with a seamless experience in managing their medication needs. Leveraging React for the front-end and Flask for the back-end, MediMart aims to revolutionize the accessibility of healthcare services.
+MediMart is a comprehensive online pharmacy platform developed to provide users with a seamless experience in managing their medication needs. Leveraging React for the front-end and Flask for the back-end, MediMart aims to revolutionize the accessibility of healthcare services.
 
 ## Minimum Viable Product(MVP)
 MediMart online pharmacy enables users to browse, order, and manage medications online.
