@@ -18,7 +18,7 @@ jwt = JWTManager()
 
 def create_app():
     app = Flask(__name__)
-    app.config.from_object('server.app.config.Config')
+    app.config.from_object('app.config.Config')
     db.init_app(app)
     bcrypt.init_app(app)
     migrate.init_app(app, db)
@@ -26,7 +26,7 @@ def create_app():
     CORS(app)
 
     with app.app_context():
-        from server.app.routes import routes
+        from app.routes import routes
         app.register_blueprint(routes)
         db.create_all()
     return app
