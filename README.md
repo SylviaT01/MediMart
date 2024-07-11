@@ -1,70 +1,83 @@
-# Getting Started with Create React App
+![Home Screenshot](/client/src/components/assets/frontpage.png)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# MediMart 
 
-## Available Scripts
+## Introduction
+art is a comprehensive online pharmacy platform developed to provide users with a seamless experience in managing their medication needs. Leveraging React for the front-end and Flask for the back-end, MediMart aims to revolutionize the accessibility of healthcare services.
 
-In the project directory, you can run:
+## Minimum Viable Product(MVP)
+MediMart online pharmacy enables users to browse, order, and manage medications online.
 
-### `npm start`
+## Features
+- A visually engaging landing page.
+- User authentication and authorization
+- Medication catalog with search and filter functionality
+- Cart management with total cost calculation
+- Contact section for customer support
+- Service Review System
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Objectives
+- To provide a user-friendly and intuitive interface for users to browse, order, and manage their medications
+- To implement secure user authentication and role-based access control.
+- Ensure detailed product listings with comprehensive information and visuals.
+- Develop a robust shopping cart with full CRUD functionality.
+- Implement a service review system to build user trust and transparency.
+- To ensure secure data storage and transmission to protect user privacy and sensitive information.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Technologies used
 
-### `npm test`
+- [React](https://reactjs.org/)
+- [React Icons](https://react-icons.github.io/react-icons/)
+- [Google fonts](https://fonts.google.com/)
+- [AOS](https://michalsnik.github.io/aos/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [Flask](https://flask.palletsprojects.com/en/3.0.x/)
+- [Font Awesome](https://fontawesome.com/)
+- [Git](https://www.git-scm.com/)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Get Started
+1. Clone the repository
+```bash
+git clone git@github.com:SylviaT01/MediMart.git
+```
+2. Install dependencies
+```bash
+npm install
+```
+```bash
+pipenv install
+```
+3. Enter virtual environment(Backend)
+```bash
+pipenv shell
+```
+4. Start the Flask server
+```bash
+python run.py
+```
+5. Start the React development server
+```bash
+npm start
+```
 
-### `npm run build`
+## Requirements
+- Programming knowledge (HTML, JavaScript, Python and SQL)
+- Visual Studio as code editor
+- Basic understanding of web development and design principles
+- Familiarity with React and Flask frameworks
+- Experience with databases and SQL queries
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Contributions
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Contributions are welcome! If you'd like to contribute, please fork the repository and submit a pull request.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Author
+- [Sylvia Chebet](https://github.com/SylviaT01)
+- [Wilfred Ketere](https://github.com/WLemmy)
+- [Morris Mburu](https://github.com/mrrsmburu)
+- [Lewis Wambugu](https://github.com/Wambuguu)
+- [Uwes Ahabab](https://github.com/ahabab23/ahabab23)
 
-### `npm run eject`
+## Copyright and License Information
+The project is licensed under [MIT License](LICENSE)
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
