@@ -26,7 +26,7 @@ def create_app():
     CORS(app)
 
     with app.app_context():
-        from app.routes import routes
+        from server.app.routes import routes
         app.register_blueprint(routes)
         db.create_all()
     return app
