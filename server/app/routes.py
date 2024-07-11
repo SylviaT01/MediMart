@@ -238,24 +238,46 @@ def create_address():
 @routes.route('/contacts', methods=['POST'])
 @jwt_required()
 def submit_contact():
-    data = request.json
-    name = data.get('name')
-    email = data.get('email')
-    rating = data.get('rating')
-    message = data.get('message')
-    user_id = data.get('userId')  # Assuming the frontend sends 'userId' field
+    try:
+        data = request.get_json()
+        user_id = get_jwt_identity()
 
-    # Basic validation (you may want to expand this based on your needs)
-    if not name or not email or not message:
-        return jsonify({"error": "All fields are required"}), 400
+        if not data or not all(key in data for key in ('name', 'email', 'rating', 'message')):
+            return jsonify({"error": "Invalid data"}), 400
+    
+        new_message = Contact(
+            name = data['name'],
+            email = data['email'],
+            rating = data['rating'],
+            message = data['message'],
+            user_id = user_id  
+    )
+        # try:
+        #     rating = int(rating)
+        # except ValueError:
+        #     return jsonify({"error": "Invalid rating"}), 400
 
-    # Convert rating to an integer (assuming a 1-5 scale)
+        db.session.add(new_message)
+        db.session.commit()
+        return jsonify(new_message.as_dict()), 201
+    except Exception as e:
+        print(f"Error creating message: {e}")
+        return jsonify({"error": "An error occurred while creating the message"}), 500
+    
+
+    #  # Assuming the frontend sends 'userId' field
+
+    # # Basic validation (you may want to expand this based on your needs)
+    # if not name or not email or not message:
+    #     return jsonify({"error": "All fields are required"}), 400
+
+    #  Convert rating to an integer (assuming a 1-5 scale)
     try:
         rating = int(rating)
     except ValueError:
         return jsonify({"error": "Invalid rating"}), 400
 
-    # Create and save the contact
-    new_contact = Contact(name=name, email=email, rating=rating, message=message, user_id=user_id)
-    db.session.add(new_contact)
-    db.session.commit()
+    # # Create and save the contact
+    # new_contact = Contact(name=name, email=email, rating=rating, message=message, user_id=user_id)
+    # db.session.add(new_contact)
+    # db.session.commit()

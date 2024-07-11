@@ -3,15 +3,17 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import Rating from 'react-rating-stars-component';
 import { UserContext } from './context/userContext';
+import { useNavigate } from "react-router-dom";
 
 const Contact = () => {
   const { currentUser, authToken } = useContext(UserContext);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [rating, setRating] = useState(0);
+  const navigate = useNavigate();
+  console.log(currentUser)
 
   const initialValues = {
-    name: '',
-    email: '',
+    name: currentUser.name,
+    email: currentUser.email,
     rating: 0,
     message: ''
   };
@@ -24,13 +26,13 @@ const Contact = () => {
 
   const handleSubmit = async (values, { resetForm }) => {
     try {
-      const response = await fetch(`http://localhost:5000/contacts?user_id=${currentUser.id}`, {
+      const response = await fetch('http://localhost:5000/contacts', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${authToken}`
         },
-        body: JSON.stringify({ ...values, userId: currentUser.id }),
+        body: JSON.stringify(values),
       });
 
       if (!response.ok) {
@@ -41,7 +43,7 @@ const Contact = () => {
       console.log(data);
       resetForm();
       setIsSubmitted(true);
-      setRating(0);
+      navigate('/home');
     } catch (error) {
       console.error('Error submitting contact form:', error);
     }
@@ -59,7 +61,7 @@ const Contact = () => {
               validationSchema={validationSchema}
               onSubmit={handleSubmit}
             >
-              {({ isSubmitting, setFieldValue }) => (
+              {({ isSubmitting, setFieldValue, values }) => (
                 <Form>
                   <div className="mb-4">
                     <label htmlFor="name" className="block text-gray-700 text-sm font-bold mb-2">
@@ -92,8 +94,8 @@ const Contact = () => {
                     <label className="block text-gray-700 text-sm font-bold mb-2">Rate Our Services</label>
                     <Rating
                       count={5}
-                      value={rating}
-                      onChange={(newRating) => setRating(newRating)}
+                      value={values.rating}
+                      onChange={(newRating) => setFieldValue('rating', newRating)}
                       size={24}
                       activeColor="#ffd700"
                     />
