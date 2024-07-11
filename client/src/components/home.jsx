@@ -16,6 +16,7 @@ import {
   faTruck,
 } from "@fortawesome/free-solid-svg-icons";
 import "aos/dist/aos.css";
+import Footer from './footer'
 
 const Home = () => {
   const [loading, setLoading] = useState(true);
@@ -55,7 +56,7 @@ const Home = () => {
           <Slider {...settings}>
             <div className="relative">
               <video
-                className="w-full h-svh object-cover "
+                className="w-full h-[500px] object-cover "
                 autoPlay
                 loop
                 muted
@@ -63,9 +64,9 @@ const Home = () => {
               >
                 <source src={Video} type="video/mp4" />
               </video>
-              <div className="absolute inset-0 flex flex-col justify-center items-center text-center text-white">
-                <h2 className="text-4xl md:text-6xl lg:text-7xl  font-semibold uppercase space-font z-10 text-white">
-                  Welcome to Our Online Pharmacy
+              <div className="absolute inset-0 flex flex-col justify-center items-center text-center text-slate-200">
+                <h2 className="text-4xl md:text-6xl lg:text-7xl  font-semibold uppercase space-font z-10">
+                  MediMart
                 </h2>
                 <p className="w-2/3 lg:w-1/2 z-20 text-sm md:text-base lg:text-lg xl:text-xl">
                   Find the best products for your health needs.
@@ -80,7 +81,7 @@ const Home = () => {
             </div>
             <div className="relative">
               <video
-                className="w-full  object-cover h-svh"
+                className="w-full  object-cover h-[500px]"
                 autoPlay
                 loop
                 muted
@@ -88,12 +89,12 @@ const Home = () => {
               >
                 <source src={Video1} type="video/mp4" />
               </video>
-              <div className="absolute inset-0 flex flex-col justify-center items-center text-center text-white">
-                <h2 className="text-4xl md:text-6xl lg:text-7xl  font-semibold uppercase space-font z-10 text-white">
-                  Welcome to Our Online Pharmacy
+              <div className="absolute inset-0 flex flex-col justify-center items-center text-center text-slate-200">
+                <h2 className="text-4xl md:text-6xl lg:text-7xl  font-semibold uppercase space-font z-10 ">
+                  Discover MediMart
                 </h2>
                 <p className="w-2/3 lg:w-1/2 z-20 text-sm md:text-base lg:text-lg xl:text-xl">
-                  Find the best products for your health needs.
+                Your trusted online pharmacy for all your medication needs.
                 </p>
                 <Link
                   to="/about"
@@ -105,7 +106,7 @@ const Home = () => {
             </div>
             <div className="relative">
               <video
-                className="w-full object-cover h-svh"
+                className="w-full object-cover h-[500px]"
                 autoPlay
                 loop
                 muted
@@ -140,7 +141,7 @@ const Home = () => {
                 key={index}
                 className={`flex flex-col items-center text-center transform transition duration-300 ease-in-out hover:scale-105 ${feature.animation}`}
               >
-                <div className="w-24 h-24 flex items-center justify-center bg-slate-100 rounded-full mb-4 border border-blue-200">
+                <div className="w-24 h-24 flex items-center justify-center bg-slate-100 rounded-full mb-4 border border-blue-200" data-aos="fade-left">
                   <FontAwesomeIcon
                     icon={feature.icon}
                     className="text-blue-400 text-4xl"
@@ -268,6 +269,7 @@ const Home = () => {
           </div>
         </article>
       </div>
+      <Footer />
     </div>
   );
 };

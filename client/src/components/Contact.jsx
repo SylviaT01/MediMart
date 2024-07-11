@@ -4,6 +4,7 @@ import * as Yup from 'yup';
 import Rating from 'react-rating-stars-component';
 import { UserContext } from './context/userContext';
 import { useNavigate } from "react-router-dom";
+import Footer from './footer'
 
 const Contact = () => {
   const { currentUser, authToken } = useContext(UserContext);
@@ -51,7 +52,7 @@ const Contact = () => {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 py-8">
-      <div className="w-full max-w-screen-lg bg-white shadow-md rounded-md overflow-hidden">
+      <div className="w-full max-w-screen-lg bg-white shadow-md rounded-md overflow-hidden mb-8">
         <div className="md:flex">
           {/* Contact Form */}
           <div className="w-full md:w-1/2 p-8">
@@ -155,6 +156,7 @@ const Contact = () => {
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 };

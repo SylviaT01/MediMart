@@ -2,6 +2,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import { CartContext } from "./context/cartContext";
 import { UserContext } from "./context/userContext";
+import Footer from './footer'
 
 
 const ProductList = ({ setCart }) => {
@@ -11,7 +12,7 @@ const ProductList = ({ setCart }) => {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [sortOption, setSortOption] = useState(""); // State for sorting option
-  const [sortOrder, setSortOrder] = useState("asc"); // Default sort order
+  // const [sortOrder, setSortOrder] = useState("asc"); // Default sort order
   const { addToCart } = useContext(CartContext);
   const { currentUser, authToken } = useContext(UserContext);
   const [quantities, setQuantities] = useState([]);
@@ -173,8 +174,8 @@ const ProductList = ({ setCart }) => {
 
   return (
 
-    <div className="w-full mx-auto p-4 mt-15">
-      <div className="flex justify-between item-center mb-4 space-x-4">
+    <div className="w-full mx-auto p-4 mt-15 ">
+      <div className="flex justify-between item-center mb-4 space-x-4 " data-aos="fade-up">
         {/* Category filter dropdown */}
         <select
           className="px-4 py-2 border border-gray-300 rounded-md capitalize"
@@ -212,12 +213,12 @@ const ProductList = ({ setCart }) => {
           <option value="name-desc">Name (Z-A)</option>
         </select>
       </div>
-      <hr className="my-6 border-gray-200" />
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 w-full">
+      <hr className="my-2 border-gray-200" />
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 w-full bg-blue-100">
         {filteredProducts.map((product) => (
           <div
             key={product.id}
-            className="border p-4 flex flex-col justify-between shadow-xl rounded-lg overflow-hidden bg-white"
+            className="border p-4 flex flex-col justify-between shadow-xl rounded-lg overflow-hidden bg-white mb-4"
           >
             <h2 className="font-medium text-lg mb-2 overflow-hidden relative">
               <span className="marquee">{product.title}</span>
@@ -268,6 +269,7 @@ const ProductList = ({ setCart }) => {
       </div>
   </div>
 )}
+<Footer />
     </div>
   );
 };

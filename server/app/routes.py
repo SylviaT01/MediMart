@@ -252,11 +252,6 @@ def submit_contact():
             message = data['message'],
             user_id = user_id  
     )
-        # try:
-        #     rating = int(rating)
-        # except ValueError:
-        #     return jsonify({"error": "Invalid rating"}), 400
-
         db.session.add(new_message)
         db.session.commit()
         return jsonify(new_message.as_dict()), 201
@@ -264,20 +259,3 @@ def submit_contact():
         print(f"Error creating message: {e}")
         return jsonify({"error": "An error occurred while creating the message"}), 500
     
-
-    #  # Assuming the frontend sends 'userId' field
-
-    # # Basic validation (you may want to expand this based on your needs)
-    # if not name or not email or not message:
-    #     return jsonify({"error": "All fields are required"}), 400
-
-    #  Convert rating to an integer (assuming a 1-5 scale)
-    try:
-        rating = int(rating)
-    except ValueError:
-        return jsonify({"error": "Invalid rating"}), 400
-
-    # # Create and save the contact
-    # new_contact = Contact(name=name, email=email, rating=rating, message=message, user_id=user_id)
-    # db.session.add(new_contact)
-    # db.session.commit()

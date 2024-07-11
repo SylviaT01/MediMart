@@ -2,6 +2,7 @@ import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "./context/userContext";
 import { CartContext } from "./context/cartContext";
+import Footer from './footer'
 
 const ShippingForm = () => {
   const { currentUser, authToken } = useContext(UserContext);
@@ -71,7 +72,7 @@ const ShippingForm = () => {
 
   return (
     <div className="flex flex-col items-center justify-center bg-gray-100 py-8 min-h-screen">
-      <div className="w-full max-w-lg bg-white p-6 rounded-lg shadow-md">
+      <div className="w-full max-w-lg bg-white p-6 rounded-lg shadow-md mb-8">
         <h2 className="text-2xl font-semibold mb-4 text-center">
           Shipping Information
         </h2>
@@ -148,6 +149,7 @@ const ShippingForm = () => {
           </div>
         </form>
       </div>
+      <Footer />
     </div>
   );
 };
