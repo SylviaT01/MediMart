@@ -56,3 +56,11 @@ python run.py
 npm start
 ```
 
+## Requirements
+- Programming knowledge (HTML, JavaScript, Python and SQL)
+- Visual Studio as code editor
+- Basic understanding of web development and design principles
+- Familiarity with React and Flask frameworks
+- Experience with databases and SQL queries
+
+
