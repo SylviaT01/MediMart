@@ -23,3 +23,14 @@ MediMart online pharmacy enables users to browse, order, and manage medications 
 - Develop a robust shopping cart with full CRUD functionality.
 - Implement a service review system to build user trust and transparency.
 - To ensure secure data storage and transmission to protect user privacy and sensitive information.
+
+## Technologies used
+
+- [React](https://reactjs.org/)
+- [React Icons](https://react-icons.github.io/react-icons/)
+- [Google fonts](https://fonts.google.com/)
+- [AOS](https://michalsnik.github.io/aos/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [Flask](https://flask.palletsprojects.com/en/3.0.x/)
+- [Font Awesome](https://fontawesome.com/)
+- [Git](https://www.git-scm.com/)
