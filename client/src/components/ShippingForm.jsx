@@ -9,7 +9,7 @@ const ShippingForm = () => {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
-    name: "",
+    name: currentUser.name,
     deliveryLocation: "",
     apartment: "",
     townCity: "",

@@ -1,6 +1,5 @@
 from app import db
 from sqlalchemy.ext.associationproxy import association_proxy
-from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship
 from datetime import datetime
 
@@ -48,7 +47,8 @@ class Order(db.Model):
     quantity = db.Column(db.Integer, nullable=False)
     price = db.Column(db.Integer, nullable=False)
     total_price = db.Column(db.Integer, nullable=False)
-    order_date = db.Column(db.DateTime, nullable=False)
+    order_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    status = db.Column(db.String(20), nullable=False, default="unprocessed")  # New column
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     product_id = db.Column(db.Integer, db.ForeignKey('products.id'))
     user = db.relationship('User', back_populates='orders')
@@ -61,6 +61,7 @@ class Order(db.Model):
             'price': self.price,
             'total_price': self.total_price,
             'order_date': self.order_date.isoformat(),
+            'status': self.status,  # Include status
             'user_id': self.user_id,
             'product': {
                 'id': self.product.id,
@@ -69,9 +70,9 @@ class Order(db.Model):
                 'price': self.product.price
             }
         }
+
     def as_dict(self):
         return {col.name: getattr(self, col.name) for col in self.__table__.columns}
-    
 
 class Address(db.Model):
     __tablename__ = 'addresses'
@@ -83,6 +84,7 @@ class Address(db.Model):
     apartment= db.Column(db.String(120), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     user = db.relationship('User', back_populates='addresses') 
+
     def as_dict(self):
         return {col.name: getattr(self, col.name) for col in self.__table__.columns}
 

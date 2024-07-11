@@ -136,83 +136,126 @@ def delete_user(id):
     return jsonify({'message': 'User deleted successfully'}), 200
 
 # Get all products
+# Product Routes
+
 @routes.route('/products', methods=['GET'])
 def get_products():
+    """
+    Route to get all products.
+    """
     products = Product.query.all()
-    return jsonify([product.as_dict() for product in products])
+    return jsonify([product.as_dict() for product in products]), 200
 
-# Get a single product
+
 @routes.route('/products/<int:product_id>', methods=['GET'])
 def get_product(product_id):
+    """
+    Route to get details of a specific product.
+    """
     product = Product.query.get(product_id)
-    return jsonify(product.as_dict())
 
-# Delete product
+    if product:
+        return jsonify(product.as_dict()), 200
+    else:
+        return jsonify({'error': 'Product not found'}), 404
+
+
 @routes.route('/products/<int:product_id>', methods=['DELETE'])
 def delete_product(product_id):
+    """
+    Route to delete a specific product.
+    """
     product = Product.query.get(product_id)
+
+    if not product:
+        return jsonify({'error': 'Product not found'}), 404
+
     db.session.delete(product)
     db.session.commit()
-    return '', 204
-  
+
+    return jsonify({'message': 'Product deleted successfully'}), 200
+
+
+# Order Routes
 @routes.route('/orders', methods=['POST'])
 @jwt_required()
 def create_order():
+    """
+    Route to create a new order for the current user.
+    """
     try:
         data = request.get_json()
-        user_id = get_jwt_identity()
+        current_user_id = get_jwt_identity()
 
-        if not data or not all(key in data for key in ('product_id', 'quantity', 'total_price')):
+        if not data or not all(key in data for key in ('user_id', 'product_id', 'quantity', 'price', 'total_price')):
             return jsonify({"error": "Invalid data"}), 400
 
         new_order = Order(
-            user_id=user_id,
+            user_id=data['user_id'],
             product_id=data['product_id'],
             quantity=data['quantity'],
-            price=data.get('price'), 
+            price=data['price'],
             total_price=data['total_price'],
-            order_date=datetime.utcnow(),
+            status='unprocessed',
+            order_date=datetime.now()
         )
+
         db.session.add(new_order)
         db.session.commit()
-        return jsonify(new_order.as_dict()), 201
+
+        return jsonify(new_order.serialize()), 201
     except Exception as e:
         print(f"Error creating order: {e}")
         return jsonify({"error": "An error occurred while creating the order"}), 500
 
 
-
-#Get all orders
 @routes.route('/orders', methods=['GET'])
 @jwt_required()
 def get_orders():
+    """
+    Route to get all orders for the current user.
+    """
     current_user_id = get_jwt_identity()
-    orders = Order.query.filter_by(user_id=current_user_id).all()
+    orders = Order.query.filter_by(user_id=current_user_id, status='unprocessed').all()
     return jsonify([order.serialize() for order in orders]), 200
 
-# Delete order
+
 @routes.route('/orders/<int:order_id>', methods=['DELETE'])
+@jwt_required()
 def delete_order(order_id):
+    """
+    Route to delete a specific order.
+    """
     order = Order.query.get(order_id)
 
     if not order:
         return jsonify({'error': 'Order not found'}), 404
-    
+
     db.session.delete(order)
     db.session.commit()
-    
+
     return '', 204
 
 
+# Category Routes
+
 @routes.route('/categories', methods=['GET'])
 def get_categories():
+    """
+    Route to get all categories.
+    """
     categories = Category.query.all()
-    return jsonify([category.as_dict() for category in categories])
+    return jsonify([category.as_dict() for category in categories]), 200
 
+
+# Address Routes
 
 @routes.route('/addresses', methods=['POST'])
 @jwt_required()
 def create_address():
+    """
+    Route to create a new address for the current user.
+    """
     try:
         data = request.get_json()
         user_id = get_jwt_identity()
@@ -230,54 +273,47 @@ def create_address():
         )
         db.session.add(new_address)
         db.session.commit()
+
+        # Update order status to 'processed' for all unprocessed orders of the user
+        orders = Order.query.filter_by(user_id=user_id, status='unprocessed').all()
+        for order in orders:
+            order.status = 'processed'
+        db.session.commit()
+
         return jsonify(new_address.as_dict()), 201
     except Exception as e:
         print(f"Error creating address: {e}")
         return jsonify({"error": "An error occurred while creating the address"}), 500
 
+
+# Contact Routes
+
 @routes.route('/contacts', methods=['POST'])
 @jwt_required()
 def submit_contact():
+    """
+    Route to submit a contact message from the current user.
+    """
     try:
         data = request.get_json()
         user_id = get_jwt_identity()
 
         if not data or not all(key in data for key in ('name', 'email', 'rating', 'message')):
             return jsonify({"error": "Invalid data"}), 400
-    
+
         new_message = Contact(
-            name = data['name'],
-            email = data['email'],
-            rating = data['rating'],
-            message = data['message'],
-            user_id = user_id  
-    )
-        # try:
-        #     rating = int(rating)
-        # except ValueError:
-        #     return jsonify({"error": "Invalid rating"}), 400
+            name=data['name'],
+            email=data['email'],
+            rating=data['rating'],
+            message=data['message'],
+            user_id=user_id
+        )
 
         db.session.add(new_message)
         db.session.commit()
+
         return jsonify(new_message.as_dict()), 201
     except Exception as e:
-        print(f"Error creating message: {e}")
-        return jsonify({"error": "An error occurred while creating the message"}), 500
-    
+        print(f"Error submitting contact message: {e}")
+        return jsonify({"error": "An error occurred while submitting the message"}), 500
 
-    #  # Assuming the frontend sends 'userId' field
-
-    # # Basic validation (you may want to expand this based on your needs)
-    # if not name or not email or not message:
-    #     return jsonify({"error": "All fields are required"}), 400
-
-    #  Convert rating to an integer (assuming a 1-5 scale)
-    try:
-        rating = int(rating)
-    except ValueError:
-        return jsonify({"error": "Invalid rating"}), 400
-
-    # # Create and save the contact
-    # new_contact = Contact(name=name, email=email, rating=rating, message=message, user_id=user_id)
-    # db.session.add(new_contact)
-    # db.session.commit()

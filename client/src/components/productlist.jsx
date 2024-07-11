@@ -1,8 +1,6 @@
-
 import React, { useEffect, useState, useContext } from "react";
 import { CartContext } from "./context/cartContext";
 import { UserContext } from "./context/userContext";
-
 
 const ProductList = ({ setCart }) => {
   const [products, setProducts] = useState([]);
@@ -15,10 +13,7 @@ const ProductList = ({ setCart }) => {
   const { addToCart } = useContext(CartContext);
   const { currentUser, authToken } = useContext(UserContext);
   const [quantities, setQuantities] = useState([]);
-  const [alertMessage, setAlertMessage] = useState('');
-
-
-  
+  const [alertMessage, setAlertMessage] = useState("");
 
   // Fetch products from API
   useEffect(() => {
@@ -75,8 +70,6 @@ const ProductList = ({ setCart }) => {
     setFilteredProducts(filtered);
   };
 
-  
-
   // Handle adding to cart
   const handleAddToCart = (product) => {
     const token = authToken || localStorage.getItem("access_token");
@@ -84,11 +77,10 @@ const ProductList = ({ setCart }) => {
       console.error("No auth token available");
       return;
     }
-  
 
     const quantity = quantities[product.id] || 1;
 
-    // Create a new order
+    // Create a new order object
     const order = {
       user_id: currentUser.id,
       product_id: product.id,
@@ -113,14 +105,10 @@ const ProductList = ({ setCart }) => {
       })
       .then((data) => {
         console.log("Order created:", data);
-        // Update cart state
         addToCart({ ...product, quantity });
-        // Set alert message
-        setAlertMessage('Product added to cart successfully!');
-
-        // Clear the alert message after 3 seconds
+        setAlertMessage("Product added to cart successfully!");
         setTimeout(() => {
-          setAlertMessage('');
+          setAlertMessage("");
         }, 3000);
       })
       .catch((error) => console.error("Error creating order:", error));
@@ -172,7 +160,6 @@ const ProductList = ({ setCart }) => {
   };
 
   return (
-
     <div className="w-full mx-auto p-4 mt-15">
       <div className="flex justify-between item-center mb-4 space-x-4">
         {/* Category filter dropdown */}
@@ -190,16 +177,16 @@ const ProductList = ({ setCart }) => {
         </select>
         {/* Search bar */}
         <div className="flex space-x-4">
-        <input
-          type="text"
-          className="px-4 py-2 border border-gray-300 rounded-md"
-          placeholder="Search products"
-          value={searchQuery}
-          onChange={(e) => handleSearchChange(e.target.value)}
-        />
+          <input
+            type="text"
+            className="px-4 py-2 border border-gray-300 rounded-md"
+            placeholder="Search products"
+            value={searchQuery}
+            onChange={(e) => handleSearchChange(e.target.value)}
+          />
         </div>
         {/* Sort dropdown */}
-        
+
         <select
           className="px-4 py-2 border border-gray-300 rounded-md"
           value={sortOption}
@@ -262,12 +249,12 @@ const ProductList = ({ setCart }) => {
       </div>
       {/* Alert message */}
       {alertMessage && (
-      <div className="fixed inset-x-0 bottom-0 flex items-center justify-center z-50">
-        <div className="bg-blue-500 text-white text-center py-2 px-4 rounded">
-        {alertMessage}
-      </div>
-  </div>
-)}
+        <div className="fixed inset-x-0 bottom-0 flex items-center justify-center z-50">
+          <div className="bg-blue-500 text-white text-center py-2 px-4 rounded">
+            {alertMessage}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
