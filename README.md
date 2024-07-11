@@ -15,3 +15,11 @@ MediMart online pharmacy enables users to browse, order, and manage medications 
 - Cart management with total cost calculation
 - Contact section for customer support
 - Service Review System
+
+## Objectives
+- To provide a user-friendly and intuitive interface for users to browse, order, and manage their medications
+- To implement secure user authentication and role-based access control.
+- Ensure detailed product listings with comprehensive information and visuals.
+- Develop a robust shopping cart with full CRUD functionality.
+- Implement a service review system to build user trust and transparency.
+- To ensure secure data storage and transmission to protect user privacy and sensitive information.
