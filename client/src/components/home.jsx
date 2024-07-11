@@ -7,6 +7,7 @@ import Video2 from "./assets/Pharm2.mp4";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Progress } from "@chakra-ui/react";
 import {
   faHeadset,
   faUserMd,
@@ -64,7 +65,7 @@ const Home = () => {
               >
                 <source src={Video} type="video/mp4" />
               </video>
-              <div className="absolute inset-0 flex flex-col justify-center items-center text-center text-slate-200">
+              <div className="absolute inset-0 flex flex-col justify-center items-center text-center text-white" > 
                 <h2 className="text-4xl md:text-6xl lg:text-7xl  font-semibold uppercase space-font z-10">
                   MediMart
                 </h2>
@@ -89,7 +90,7 @@ const Home = () => {
               >
                 <source src={Video1} type="video/mp4" />
               </video>
-              <div className="absolute inset-0 flex flex-col justify-center items-center text-center text-slate-200">
+              <div className="absolute inset-0 flex flex-col justify-center items-center text-center text-white" >
                 <h2 className="text-4xl md:text-6xl lg:text-7xl  font-semibold uppercase space-font z-10 ">
                   Discover MediMart
                 </h2>
@@ -114,19 +115,19 @@ const Home = () => {
               >
                 <source src={Video2} type="video/mp4" />
               </video>
-              <div className="absolute inset-0 flex flex-col justify-center items-center text-center text-white">
-                <h2 className="text-4xl md:text-6xl lg:text-7xl  font-semibold uppercase space-font z-10 text-white">
-                  Welcome to Our Online Pharmacy
+              <div className="absolute inset-0 flex flex-col justify-center items-center text-center text-white" >
+                <h2 className="text-4xl md:text-6xl lg:text-7xl  font-semibold uppercase space-font z-10 ">
+                Thank you for choosing MediMart!
                 </h2>
-                <p className="w-2/3 lg:w-1/2 z-20 text-sm md:text-base lg:text-lg xl:text-xl">
+                {/* <p className="w-2/3 lg:w-1/2 z-20 text-sm md:text-base lg:text-lg xl:text-xl">
                   Find the best products for your health needs.
-                </p>
-                <Link
+                </p> */}
+                {/* <Link
                   to="/contact"
                   className="bg-blue-300 hover:bg-blue-200 text-white py-2 px-4 mt-4 rounded-md transition duration-300 ease-in-out"
                 >
                   Reach out
-                </Link>
+                </Link> */}
               </div>
             </div>
           </Slider>

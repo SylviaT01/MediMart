@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useContext } from "react";
 import { CartContext } from "./context/cartContext";
 import { UserContext } from "./context/userContext";
+import Footer from "./footer";
+
 
 const ProductList = ({ setCart }) => {
   const [products, setProducts] = useState([]);
@@ -8,8 +10,7 @@ const ProductList = ({ setCart }) => {
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
-  const [sortOption, setSortOption] = useState(""); // State for sorting option
-  const [sortOrder, setSortOrder] = useState("asc"); // Default sort order
+  const [sortOption, setSortOption] = useState("");
   const { addToCart } = useContext(CartContext);
   const { currentUser, authToken } = useContext(UserContext);
   const [quantities, setQuantities] = useState([]);
@@ -255,6 +256,7 @@ const ProductList = ({ setCart }) => {
           </div>
         </div>
       )}
+      <Footer />
     </div>
   );
 };

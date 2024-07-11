@@ -1,12 +1,14 @@
-
 import React, { useContext, useState } from 'react';
 import { UserContext } from './context/userContext';
 import { Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 
 export default function Login() {
   const { login } = useContext(UserContext);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -19,8 +21,8 @@ export default function Login() {
         <div className="flex flex-col md:flex-row">
           {/* Left blue half */}
           <div className="bg-blue-300 flex flex-col justify-center items-center md:w-1/2 px-4 py-4 md:px-8 bg-cover bg-center " style={{ backgroundImage: `url('https://img.freepik.com/premium-photo/blurred-drugstore-background-defocus_841543-8518.jpg?w=360')` }}>
-            <h2 className="text-3xl font-semibold text-gray-700 text-center">Welcome to Medimart</h2>
-            <p className="text-gray-700 mt-4 text-center">Your trusted online pharmacy.</p>
+            <h2 className="text-3xl font-semibold text-gray-700 text-center" data-aos="fade-up">Welcome to Medimart</h2>
+            <p className="text-gray-700 mt-4 text-center" data-aos="fade-up">Your trusted online pharmacy.</p>
           </div>
           
           {/* Right white half */}
@@ -46,14 +48,14 @@ export default function Login() {
                         placeholder="Email address"
                       />
                     </div>
-                    <div>
+                    <div className="relative">
                       <label htmlFor="password" className="block text-sm font-medium text-gray-700">
                         Password
                       </label>
                       <input
                         id="password"
                         name="password"
-                        type="password"
+                        type={showPassword ? 'text' : 'password'}
                         autoComplete="current-password"
                         required
                         value={password}
@@ -61,6 +63,9 @@ export default function Login() {
                         className="input-field"
                         placeholder="Password"
                       />
+                      <span className="absolute inset-y-0 right-0 pr-3 pt-4 flex items-center cursor-pointer" onClick={() => setShowPassword(!showPassword)}>
+                        <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
+                      </span>
                     </div>
                     <div className="flex items-center justify-between">
                       <div className="flex items-center">

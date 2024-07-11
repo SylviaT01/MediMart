@@ -1,6 +1,8 @@
 import React, { useContext, useState } from 'react';
 import { UserContext } from './context/userContext';
 import { Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 
 export default function SignUp() {
   const { signup } = useContext(UserContext);
@@ -8,9 +10,20 @@ export default function SignUp() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
+  const [error, setError] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [showPasswordConfirmation, setShowPasswordConfirmation] = useState(false);
 
   function handleSubmit(e) {
     e.preventDefault();
+    if (password !== passwordConfirmation) {
+      setError('Passwords do not match');
+      return;
+    }
+    if (!/(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-zA-Z]).{8,}/.test(password)) {
+      setError('Password must be at least 8 characters long and include numbers and symbols');
+      return;
+    }
     signup(name, email, password);
   }
 
@@ -19,9 +32,9 @@ export default function SignUp() {
       <div className="w-full max-w-screen-lg bg-white rounded-lg overflow-hidden shadow-md">
         <div className="flex flex-col md:flex-row">
           {/* Left blue half */}
-          <div className="bg-blue-300 md:w-1/2 px-4 py-8 md:px-12 rounded-l-lg bg-cover bg-center" style={{ backgroundImage: `url('https://img.freepik.com/premium-photo/blurred-drugstore-background-defocus_841543-4343.jpg?w=360')` }}>
-            <h2 className="text-3xl font-semibold text-gray-700 text-center">Join Medimart</h2>
-            <p className="text-gray-700 mt-4 text-center">Create your account today.</p>
+          <div className="bg-blue-300 flex flex-col justify-center items-center md:w-1/2 px-4  md:px-12 rounded-l-lg bg-cover bg-center" style={{ backgroundImage: `url('https://img.freepik.com/premium-photo/brightly-lit-drug-store-interior_841543-24693.jpg?w=360')` }} >
+            <h2 className="text-4xl font-semibold text-gray-700 text-center" data-aos="fade-up">Join Medimart</h2>
+            <p className="text-gray-700 mt-4 text-center" data-aos="fade-up">Create your account today.</p>
           </div>
           
           {/* Right white half */}
@@ -31,6 +44,7 @@ export default function SignUp() {
                 <div className="bg-white overflow-hidden">
                   <h2 className="text-3xl font-semibold mb-4 text-center">Create an account</h2>
                   <form className="space-y-4" onSubmit={handleSubmit}>
+                    {error && <div className="text-red-500 text-center">{error}</div>}
                     <div>
                       <label htmlFor="username" className="block text-sm font-medium text-gray-700">
                         Username
@@ -63,14 +77,14 @@ export default function SignUp() {
                         placeholder="Email address"
                       />
                     </div>
-                    <div>
+                    <div className="relative">
                       <label htmlFor="password" className="block text-sm font-medium text-gray-700">
                         Password
                       </label>
                       <input
                         id="password"
                         name="password"
-                        type="password"
+                        type={showPassword ? 'text' : 'password'}
                         autoComplete="new-password"
                         required
                         value={password}
@@ -78,15 +92,18 @@ export default function SignUp() {
                         className="input-field"
                         placeholder="Password"
                       />
+                      <span className="absolute inset-y-0 right-0 pr-3 pt-4 flex items-center cursor-pointer" onClick={() => setShowPassword(!showPassword)}>
+                        <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
+                      </span>
                     </div>
-                    <div>
+                    <div className="relative">
                       <label htmlFor="passwordConfirmation" className="block text-sm font-medium text-gray-700">
                         Confirm password
                       </label>
                       <input
                         id="passwordConfirmation"
                         name="passwordConfirmation"
-                        type="password"
+                        type={showPasswordConfirmation ? 'text' : 'password'}
                         autoComplete="new-password"
                         required
                         value={passwordConfirmation}
@@ -94,6 +111,9 @@ export default function SignUp() {
                         className="input-field"
                         placeholder="Confirm Password"
                       />
+                      <span className="absolute inset-y-0 right-0 pr-3 pt-4 flex items-center cursor-pointer" onClick={() => setShowPasswordConfirmation(!showPasswordConfirmation)}>
+                        <FontAwesomeIcon icon={showPasswordConfirmation ? faEyeSlash : faEye} />
+                      </span>
                     </div>
                     <div>
                       <button
@@ -119,3 +139,4 @@ export default function SignUp() {
     </div>
   );
 }
+

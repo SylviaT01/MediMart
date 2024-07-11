@@ -95,7 +95,7 @@ export const UserProvider = ({ children }) => {
           nav("/login");
           alert(res.success);
         } else if (res.error) {
-          alert(res.error);
+          alert("Account already exists, proceed to login");
         } else {
           alert("Something went wrong");
         }

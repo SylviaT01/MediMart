@@ -19,7 +19,7 @@ import { UserProvider, UserContext } from "./components/context/userContext";
 import { CartProvider } from "./components/context/cartContext";
 import AOS from "aos";
 import "aos/dist/aos.css";
-// import Footer from "./components/footer";
+import { Progress } from "@chakra-ui/react";
 
 function AppContent() {
   useEffect(() => {
@@ -29,7 +29,7 @@ function AppContent() {
   const { currentUser, loading } = useContext(UserContext);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div><Progress size="lg" isIndeterminate colorScheme="red" /></div>;
   }
 
   return (
