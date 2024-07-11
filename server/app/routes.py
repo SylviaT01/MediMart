@@ -1,7 +1,7 @@
 from flask import request, jsonify, Blueprint
 from app import db
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity,  get_jwt, JWTManager, create_refresh_token 
-from app.models import User, Product, Order, Category
+from app.models import User, Product, Order, Category, Address, Contact
 from flask_bcrypt import Bcrypt
 # import bcrypt
 import jwt
@@ -209,3 +209,53 @@ def get_categories():
     categories = Category.query.all()
     return jsonify([category.as_dict() for category in categories])
 
+
+@routes.route('/addresses', methods=['POST'])
+@jwt_required()
+def create_address():
+    try:
+        data = request.get_json()
+        user_id = get_jwt_identity()
+
+        if not data or not all(key in data for key in ('name', 'phone_number', 'city', 'location', 'apartment')):
+            return jsonify({"error": "Invalid data"}), 400
+
+        new_address = Address(
+            name=data['name'],
+            phone_number=data['phone_number'],
+            city=data['city'],
+            location=data['location'],
+            apartment=data['apartment'],
+            user_id=user_id
+        )
+        db.session.add(new_address)
+        db.session.commit()
+        return jsonify(new_address.as_dict()), 201
+    except Exception as e:
+        print(f"Error creating address: {e}")
+        return jsonify({"error": "An error occurred while creating the address"}), 500
+
+@routes.route('/contacts', methods=['POST'])
+@jwt_required()
+def submit_contact():
+    data = request.json
+    name = data.get('name')
+    email = data.get('email')
+    rating = data.get('rating')
+    message = data.get('message')
+    user_id = data.get('userId')  # Assuming the frontend sends 'userId' field
+
+    # Basic validation (you may want to expand this based on your needs)
+    if not name or not email or not message:
+        return jsonify({"error": "All fields are required"}), 400
+
+    # Convert rating to an integer (assuming a 1-5 scale)
+    try:
+        rating = int(rating)
+    except ValueError:
+        return jsonify({"error": "Invalid rating"}), 400
+
+    # Create and save the contact
+    new_contact = Contact(name=name, email=email, rating=rating, message=message, user_id=user_id)
+    db.session.add(new_contact)
+    db.session.commit()

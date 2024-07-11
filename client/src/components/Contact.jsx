@@ -1,13 +1,18 @@
-import React from 'react';
+import React, { useContext, useState } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import Rating from 'react-rating-stars-component';
+import { UserContext } from './context/userContext';
 
 const Contact = () => {
+  const { currentUser, authToken } = useContext(UserContext);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [rating, setRating] = useState(0);
+
   const initialValues = {
     name: '',
     email: '',
-    rating: 0, // Initialize rating state
+    rating: 0,
     message: ''
   };
 
@@ -17,10 +22,29 @@ const Contact = () => {
     message: Yup.string().required('Message is required')
   });
 
-  const handleSubmit = (values, { resetForm }) => {
-    // Handle form submission logic here
-    console.log('Form submitted:', values);
-    resetForm();
+  const handleSubmit = async (values, { resetForm }) => {
+    try {
+      const response = await fetch(`http://localhost:5000/contacts?user_id=${currentUser.id}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${authToken}`
+        },
+        body: JSON.stringify({ ...values, userId: currentUser.id }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const data = await response.json();
+      console.log(data);
+      resetForm();
+      setIsSubmitted(true);
+      setRating(0);
+    } catch (error) {
+      console.error('Error submitting contact form:', error);
+    }
   };
 
   return (
@@ -68,7 +92,8 @@ const Contact = () => {
                     <label className="block text-gray-700 text-sm font-bold mb-2">Rate Our Services</label>
                     <Rating
                       count={5}
-                      onChange={(rating) => setFieldValue('rating', rating)}
+                      value={rating}
+                      onChange={(newRating) => setRating(newRating)}
                       size={24}
                       activeColor="#ffd700"
                     />
@@ -99,6 +124,10 @@ const Contact = () => {
                 </Form>
               )}
             </Formik>
+            {/* Success message */}
+            {isSubmitted && (
+              <p className="text-green-600 mt-4">Submitted successfully ✅</p>
+            )}
           </div>
           {/* Contact Information */}
           <div className="w-full md:w-1/2 p-8 bg-gray-50 rounded">

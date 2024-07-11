@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { CartContext } from "./context/cartContext";
 import { UserContext } from "./context/userContext";
-import { useNavigate } from "react-router-dom";
 
 const CartModal = ({ isOpen, toggleModal }) => {
   const { cart, removeFromCart, setCart } = useContext(CartContext);
@@ -9,7 +9,6 @@ const CartModal = ({ isOpen, toggleModal }) => {
   const [orders, setOrders] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
   const navigate = useNavigate();
-
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -105,13 +104,14 @@ const CartModal = ({ isOpen, toggleModal }) => {
       }
 
       removeFromCart(order_id);
-      const updatedOrders=orders.filter((order) => order.id !== order_id)
+      const updatedOrders = orders.filter((order) => order.id !== order_id);
       setOrders(updatedOrders);
       calculateTotalPrice(updatedOrders);
     } catch (error) {
       console.error("Error deleting order:", error);
     }
   };
+
   const calculateTotalPrice = (orders) => {
     const total = orders.reduce(
       (sum, order) => sum + order.product.price * order.quantity,
@@ -119,11 +119,12 @@ const CartModal = ({ isOpen, toggleModal }) => {
     );
     setTotalPrice(total);
   };
+
   const handleCheckout = () => {
     toggleModal(); // Close the cart modal
     navigate("/shipping"); // Navigate to the shipping form
   };
-
+  console.log(cart);
   return (
     <>
       {isOpen && (
@@ -213,8 +214,7 @@ const CartModal = ({ isOpen, toggleModal }) => {
                   <div className="flex justify-between items-center border-t border-gray-200 pt-4">
                     <h4 className="text-sm font-medium">Total Price:</h4>
                     <p className="text-sm font-medium">
-                      Ksh{" "}                       
-                      {totalPrice.toLocaleString()}
+                      Ksh {totalPrice.toLocaleString()}
                     </p>
                   </div>
 
