@@ -1,4 +1,4 @@
-![Home Screenshot](/client/src/components/assets/frontpage.jpeg)
+![Home Screenshot](/client/src/components/assets/Front-page.png)
 
 # MediMart 
 

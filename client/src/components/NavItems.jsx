@@ -5,7 +5,7 @@ import { CartContext } from "./context/cartContext";
 import { VscAccount } from "react-icons/vsc";
 import { RiShoppingBagLine } from "react-icons/ri";
 import CartModal from "./cartModal";
-import Logo from './assets/logo.jpg'
+
 
 const NavItems = () => {
   const { currentUser, logout } = useContext(UserContext);
@@ -40,7 +40,7 @@ const NavItems = () => {
     <div className="container mx-auto flex justify-between items-center">
       {currentUser ? (
         <>
-          <img src={Logo} alt="MediMart Logo" className='w-auto h-10 md:h-12 lg:h-14'/>
+          <h1 className="text-2xl font-semibold">MediMart</h1>
           <div className="flex items-center">
             <Link
               to="/home"
