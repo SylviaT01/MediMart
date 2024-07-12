@@ -15,7 +15,7 @@ const fetchWithAuth = async (url, options = {}) => {
 
   if (response.status === 401) {
     const refreshToken = localStorage.getItem("refresh_token");
-    const refreshResponse = await fetch("http://127.0.0.1:5000/refresh", {
+    const refreshResponse = await fetch("https://medimart-1.onrender.com/refresh", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -50,7 +50,7 @@ export const UserProvider = ({ children }) => {
     if (authToken) {
       try {
         const response = await fetchWithAuth(
-          "http://127.0.0.1:5000/current_user",
+          "https://medimart-1.onrender.com/current_user",
           {
             method: "GET",
             headers: {
@@ -78,7 +78,7 @@ export const UserProvider = ({ children }) => {
   }, [authToken]);
 
   const signup = (name, email, password) => {
-    fetch("http://127.0.0.1:5000/users", {
+    fetch("https://medimart-1.onrender.com/users", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -107,7 +107,7 @@ export const UserProvider = ({ children }) => {
   };
 
   const login = (email, password) => {
-    fetch("http://127.0.0.1:5000/login", {
+    fetch("https://medimart-1.onrender.com/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -142,7 +142,7 @@ export const UserProvider = ({ children }) => {
   };
 
   const logout = () => {
-    fetchWithAuth("http://127.0.0.1:5000/logout", {
+    fetchWithAuth("https://medimart-1.onrender.com/logout", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

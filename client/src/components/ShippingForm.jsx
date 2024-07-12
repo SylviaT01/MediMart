@@ -39,7 +39,7 @@ const ShippingForm = () => {
     };
 
     try {
-      const response = await fetch("http://localhost:5000/addresses", {
+      const response = await fetch("https://medimart-1.onrender.com/addresses", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

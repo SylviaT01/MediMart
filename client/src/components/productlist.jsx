@@ -20,7 +20,7 @@ const ProductList = ({ setCart }) => {
   // Fetch products from API
   useEffect(() => {
     NProgress.start(); // Start NProgress on fetch start
-    fetch("http://127.0.0.1:5000/products")
+    fetch("https://medimart-1.onrender.com/products")
       .then((response) => response.json())
       .then((data) => {
         setProducts(data);
@@ -97,7 +97,7 @@ const ProductList = ({ setCart }) => {
     };
 
     NProgress.start(); // Start NProgress on adding to cart
-    fetch("http://127.0.0.1:5000/orders", {
+    fetch("https://medimart-1.onrender.com/orders", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

@@ -20,7 +20,7 @@ const CartModal = ({ isOpen, toggleModal }) => {
 
       try {
         const response = await fetch(
-          `http://127.0.0.1:5000/orders?user_id=${currentUser.id}`,
+          `https://medimart-1.onrender.com/orders?user_id=${currentUser.id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -56,7 +56,7 @@ const CartModal = ({ isOpen, toggleModal }) => {
 
       try {
         const response = await fetch(
-          `http://127.0.0.1:5000/orders?user_id=${currentUser.id}`,
+          `https://medimart-1.onrender.com/orders?user_id=${currentUser.id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -91,7 +91,7 @@ const CartModal = ({ isOpen, toggleModal }) => {
 
     try {
       console.log("Deleting order with ID:", order_id);
-      const response = await fetch(`http://127.0.0.1:5000/orders/${order_id}`, {
+      const response = await fetch(`https://medimart-1.onrender.com/orders/${order_id}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,

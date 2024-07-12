@@ -27,7 +27,7 @@ const Contact = () => {
 
   const handleSubmit = async (values, { resetForm }) => {
     try {
-      const response = await fetch("http://localhost:5000/contacts", {
+      const response = await fetch("https://medimart-1.onrender.com/contacts", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
