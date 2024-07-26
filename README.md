@@ -71,7 +71,7 @@ npm start
 
 Contributions are welcome! If you'd like to contribute, please fork the repository and submit a pull request.
 
-## Author
+## Authors
 - [Sylvia Chebet](https://github.com/SylviaT01)
 - [Wilfred Ketere](https://github.com/WLemmy)
 - [Morris Mburu](https://github.com/mrrsmburu)
